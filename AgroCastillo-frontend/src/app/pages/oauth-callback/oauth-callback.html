@@ -1,0 +1,19 @@
+<section class="oauth-wrapper" aria-labelledby="oauth-title">
+  <article class="oauth-card">
+    <div class="oauth-icon" aria-hidden="true">
+      <span>🌿</span>
+    </div>
+
+    @if (cargando()) {
+      <h1 id="oauth-title">Validando acceso</h1>
+      <p>Estamos conectando tu cuenta de Google con AgroCastillo.</p>
+      <div class="oauth-loader" role="status" aria-label="Validando autenticación"></div>
+    }
+
+    @if (!cargando() && errorMensaje()) {
+      <h1 id="oauth-title">No se pudo iniciar sesión</h1>
+      <p role="alert">{{ errorMensaje() }}</p>
+      <a routerLink="/login" class="oauth-link">Volver al login</a>
+    }
+  </article>
+</section>

@@ -1,0 +1,760 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600;700;800&display=swap');
+
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+/* =========================
+   CONTENEDOR GENERAL
+========================= */
+
+.mis-apps-page {
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: #f8f7f2;
+  background-image:
+    radial-gradient(circle, rgba(31, 63, 44, 0.06) 1px, transparent 1px);
+  background-size: 26px 26px;
+  font-family: 'Inter', sans-serif;
+  color: #16251b;
+}
+
+/* =========================
+   ENCABEZADO
+========================= */
+
+.panel-header {
+  position: relative;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+
+  margin-bottom: 1.4rem;
+  padding: 2.4rem 2.5rem;
+
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(31, 63, 44, 0.12);
+  border-radius: 24px;
+
+  box-shadow:
+    0 24px 55px rgba(25, 45, 35, 0.1),
+    0 8px 18px rgba(25, 45, 35, 0.05);
+
+  overflow: hidden;
+}
+
+.panel-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 4%;
+  width: 92%;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #1f3f2c, #b18a46, #1f3f2c);
+}
+
+.panel-header > * {
+  position: relative;
+  z-index: 1;
+}
+
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 1.7px;
+  text-transform: uppercase;
+
+  color: #b18a46;
+}
+
+.panel-header h1 {
+  margin: 0;
+
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.2rem, 4vw, 3.7rem);
+  line-height: 0.95;
+  letter-spacing: -1px;
+
+  color: #15291d;
+}
+
+.panel-header p {
+  max-width: 780px;
+  margin: 1rem 0 0;
+
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #5e6c63;
+}
+
+/* =========================
+   BOTONES
+========================= */
+
+button,
+input,
+textarea,
+select {
+  font-family: 'Inter', sans-serif;
+}
+
+button {
+  cursor: pointer;
+}
+
+.btn-register {
+  min-height: 48px;
+  padding: 0.75rem 1.15rem;
+
+  border: none;
+  border-radius: 999px;
+
+  background: linear-gradient(135deg, #1f3f2c, #2f6042);
+  color: #ffffff;
+
+  font-size: 0.86rem;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+
+  box-shadow: 0 12px 24px rgba(31, 63, 44, 0.2);
+  transition: all 0.22s ease;
+}
+
+.btn-register:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 30px rgba(31, 63, 44, 0.27);
+}
+
+.btn-register.full {
+  width: 100%;
+  border-radius: 14px;
+}
+
+/* =========================
+   MÉTRICAS
+========================= */
+
+.metrics-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+
+  margin-bottom: 1.4rem;
+}
+
+.metrics-strip article {
+  position: relative;
+
+  padding: 1.35rem 1.4rem;
+
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(31, 63, 44, 0.12);
+  border-radius: 22px;
+
+  box-shadow:
+    0 18px 38px rgba(25, 45, 35, 0.08),
+    0 6px 14px rgba(25, 45, 35, 0.04);
+
+  overflow: hidden;
+}
+
+.metrics-strip article::after {
+  content: "";
+  position: absolute;
+  right: -32px;
+  top: -32px;
+
+  width: 90px;
+  height: 90px;
+
+  border-radius: 50%;
+  background: rgba(177, 138, 70, 0.12);
+}
+
+.metrics-strip span {
+  display: block;
+  margin-bottom: 0.65rem;
+
+  color: #5e6c63;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+}
+
+.metrics-strip strong {
+  display: block;
+
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.4rem;
+  line-height: 1;
+
+  color: #1f3f2c;
+}
+
+/* =========================
+   PANEL TABLA
+========================= */
+
+.apps-panel {
+  padding: 1.4rem;
+
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(31, 63, 44, 0.12);
+  border-radius: 24px;
+
+  box-shadow:
+    0 20px 45px rgba(25, 45, 35, 0.09),
+    0 8px 18px rgba(25, 45, 35, 0.04);
+}
+
+.table-header,
+.app-row {
+  display: grid;
+  grid-template-columns: minmax(360px, 2fr) 0.8fr 0.8fr 0.8fr 1fr;
+  gap: 1rem;
+  align-items: center;
+  min-width: 980px;
+}
+
+.table-header {
+  margin-bottom: 0.65rem;
+  padding: 0.85rem 1rem;
+
+  border-radius: 15px;
+  background: #1f3f2c;
+  color: #ffffff;
+
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.apps-list {
+  overflow-x: auto;
+}
+
+.app-row {
+  margin-bottom: 0.75rem;
+  padding: 1rem;
+
+  border: 1px solid rgba(31, 63, 44, 0.1);
+  border-radius: 18px;
+  background: #ffffff;
+
+  transition: all 0.22s ease;
+}
+
+.app-row:hover {
+  transform: translateY(-2px);
+  border-color: rgba(177, 138, 70, 0.45);
+  box-shadow: 0 12px 24px rgba(25, 45, 35, 0.08);
+}
+
+/* =========================
+   CELDA SOFTWARE
+========================= */
+
+.software-cell {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+}
+
+.app-icon {
+  width: 54px;
+  min-width: 54px;
+  height: 54px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 17px;
+
+  background:
+    radial-gradient(circle at 35% 25%, #d1b07a 0 14%, transparent 15%),
+    linear-gradient(135deg, #1f3f2c, #2f6042);
+
+  color: #ffffff;
+  box-shadow: 0 12px 22px rgba(31, 63, 44, 0.22);
+}
+
+.app-icon span {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.software-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+
+  margin-bottom: 0.35rem;
+}
+
+.software-title h2 {
+  margin: 0;
+
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.65rem;
+  line-height: 1;
+
+  color: #15291d;
+}
+
+.software-title span {
+  padding: 0.35rem 0.6rem;
+
+  border-radius: 999px;
+  background: #edf8ef;
+  color: #24713a;
+
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.software-cell p {
+  margin: 0 0 0.65rem;
+
+  color: #5e6c63;
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.tags span {
+  padding: 0.38rem 0.65rem;
+
+  border-radius: 999px;
+  background: #eef4ff;
+  color: #2d4775;
+
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.tags .sector {
+  background: #f6efe3;
+  color: #8a5d2c;
+}
+
+/* =========================
+   MÉTRICAS FILAS
+========================= */
+
+.metric-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.metric-cell strong {
+  color: #15291d;
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.metric-cell span {
+  color: #6b776f;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.app-url {
+  width: fit-content;
+  padding: 0.5rem 0.75rem;
+
+  border-radius: 999px;
+  background: #f6efe3;
+  color: #8a5d2c;
+
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-decoration: none;
+
+  transition: all 0.22s ease;
+}
+
+.app-url:hover {
+  background: #1f3f2c;
+  color: #ffffff;
+}
+
+/* =========================
+   ESTADOS
+========================= */
+
+.status-cell {
+  display: flex;
+  align-items: center;
+}
+
+.registry-status {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+
+  font-size: 0.72rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.registry-status.approved {
+  background: #edf8ef;
+  color: #24713a;
+}
+
+.registry-status.review {
+  background: #fff6df;
+  color: #9a6a2f;
+}
+
+.registry-status.rejected {
+  background: #fff0f0;
+  color: #a63b3b;
+}
+
+/* =========================
+   ACCIONES
+========================= */
+
+.actions-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.actions-cell button {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #f6f7f4;
+  color: #1f3f2c;
+
+  font-size: 1rem;
+
+  transition: all 0.22s ease;
+}
+
+.actions-cell button:hover {
+  transform: translateY(-1px);
+  background: #1f3f2c;
+  color: #ffffff;
+  box-shadow: 0 10px 18px rgba(25, 45, 35, 0.13);
+}
+
+.actions-cell button.danger {
+  background: #fff0f0;
+  color: #a63b3b;
+}
+
+.actions-cell button.danger:hover {
+  background: #a63b3b;
+  color: #ffffff;
+}
+
+/* =========================
+   EMPTY / ERROR STATE
+========================= */
+
+.empty-state {
+  padding: 2.4rem;
+  text-align: center;
+
+  border: 1px dashed rgba(31, 63, 44, 0.25);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.empty-state h2 {
+  margin: 0 0 0.6rem;
+
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  line-height: 1;
+
+  color: #1f3f2c;
+}
+
+.empty-state p {
+  max-width: 560px;
+  margin: 0 auto 1.2rem;
+
+  color: #6b776f;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.empty-state button {
+  min-height: 46px;
+  padding: 0.7rem 1rem;
+
+  border: none;
+  border-radius: 999px;
+
+  background: #1f3f2c;
+  color: #ffffff;
+
+  font-size: 0.82rem;
+  font-weight: 800;
+
+  box-shadow: 0 12px 24px rgba(31, 63, 44, 0.18);
+}
+
+.error-state {
+  border-color: rgba(166, 59, 59, 0.25);
+}
+
+.error-state h2 {
+  color: #a63b3b;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 1.2rem;
+
+  background: rgba(13, 28, 20, 0.5);
+  backdrop-filter: blur(5px);
+}
+
+.modal-card {
+  position: relative;
+
+  width: min(100%, 620px);
+  max-height: 92vh;
+  overflow-y: auto;
+
+  padding: 1.6rem;
+
+  background:
+    linear-gradient(145deg, #ffffff 0%, #fbfaf6 100%);
+  border: 1px solid rgba(31, 63, 44, 0.15);
+  border-radius: 24px;
+
+  box-shadow:
+    0 28px 70px rgba(13, 28, 20, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+
+  animation: modalIn 0.22s ease both;
+}
+
+.modal-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 7%;
+  width: 86%;
+  height: 4px;
+
+  border-radius: 999px;
+  background: linear-gradient(90deg, #1f3f2c, #b18a46, #1f3f2c);
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+
+  margin-bottom: 1.4rem;
+}
+
+.modal-header h2 {
+  margin: 0;
+
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  line-height: 1;
+
+  color: #15291d;
+}
+
+.btn-close {
+  width: 38px;
+  height: 38px;
+
+  border: none;
+  border-radius: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: #f6f7f4;
+  color: #1f3f2c;
+
+  font-size: 1rem;
+  transition: all 0.22s ease;
+}
+
+.btn-close:hover {
+  background: #fff0f0;
+  color: #a63b3b;
+}
+
+/* =========================
+   FORMULARIO MODAL
+========================= */
+
+.app-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.app-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+
+  color: #15291d;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.app-form input,
+.app-form textarea {
+  width: 100%;
+
+  padding: 0.85rem 1rem;
+
+  border: 1.5px solid rgba(31, 63, 44, 0.28);
+  border-radius: 14px;
+  outline: none;
+
+  background: #ffffff;
+  color: #16251b;
+
+  font-size: 0.92rem;
+  font-weight: 500;
+
+  transition: all 0.25s ease;
+}
+
+.app-form input {
+  min-height: 48px;
+}
+
+.app-form textarea {
+  min-height: 130px;
+  resize: vertical;
+}
+
+.app-form input::placeholder,
+.app-form textarea::placeholder {
+  color: #8a968f;
+}
+
+.app-form input:focus,
+.app-form textarea:focus {
+  border-color: #b18a46;
+  box-shadow: 0 0 0 4px rgba(177, 138, 70, 0.14);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1050px) {
+  .panel-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .panel-header .btn-register {
+    width: 100%;
+  }
+
+  .metrics-strip {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .mis-apps-page {
+    padding: 1rem;
+  }
+
+  .panel-header {
+    padding: 2rem 1.3rem;
+    border-radius: 18px;
+  }
+
+  .panel-header h1 {
+    font-size: 2.2rem;
+  }
+
+  .panel-header p {
+    font-size: 0.93rem;
+  }
+
+  .apps-panel {
+    padding: 1rem;
+    border-radius: 18px;
+  }
+
+  .modal-card {
+    padding: 1.2rem;
+    border-radius: 18px;
+  }
+
+  .modal-header h2 {
+    font-size: 1.7rem;
+  }
+
+  .empty-state {
+    padding: 1.6rem;
+  }
+}

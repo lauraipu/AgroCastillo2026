@@ -1,0 +1,8 @@
+﻿.footer-agro {
+  background-color: #09170e !important;
+  border-top: 2px solid rgba(162, 232, 185, 0.15); /* Separador verde pastel muy suave */
+}
+
+.text-muted-agro {
+  color: rgba(255, 255, 255, 0.5) !important;
+}

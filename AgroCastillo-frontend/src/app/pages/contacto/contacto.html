@@ -1,0 +1,87 @@
+<div class="container my-5">
+  <div class="text-center mb-5">
+    <span class="text-uppercase fw-bold text-success tracking-wider small">{{ 'CONTACTO.EYEBROW' | translate }}</span>
+    <h1 class="display-4 fw-bold text-dark mt-2">{{ 'CONTACTO.TITULO' | translate }}</h1>
+    <p class="text-muted lead">{{ 'CONTACTO.DESCRIPCION' | translate }}</p>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-5">
+      <div class="card p-4 border-0 shadow-sm bg-white rounded-4 h-100">
+        <h4 class="fw-bold text-dark mb-4">{{ 'CONTACTO.CANALES_DIRECTOS' | translate }}</h4>
+
+        <div class="d-flex align-items-start gap-3 mb-4">
+          <div class="icon-box bg-light rounded-3 p-2.5 text-success">
+            <i class="bi bi-clock-history fs-4"></i>
+          </div>
+          <div>
+            <h6 class="fw-bold text-dark mb-1">{{ 'CONTACTO.HORARIO_TITULO' | translate }}</h6>
+            <p class="text-muted small mb-0">{{ 'CONTACTO.HORARIO_TEXTO' | translate }}</p>
+          </div>
+        </div>
+
+        <div class="d-flex align-items-start gap-3 mb-4">
+          <div class="icon-box bg-light rounded-3 p-2.5 text-primary">
+            <i class="bi bi-building-check fs-4"></i>
+          </div>
+          <div>
+            <h6 class="fw-bold text-dark mb-1">{{ 'CONTACTO.COOPERACION_TITULO' | translate }}</h6>
+            <p class="text-muted small mb-0">{{ 'CONTACTO.COOPERACION_TEXTO' | translate }}</p>
+          </div>
+        </div>
+
+        <div class="d-flex align-items-start gap-3">
+          <div class="icon-box bg-light rounded-3 p-2.5 text-danger">
+            <i class="bi bi-shield-fill-check fs-4"></i>
+          </div>
+          <div>
+            <h6 class="fw-bold text-dark mb-1">{{ 'CONTACTO.SOPORTE_TITULO' | translate }}</h6>
+            <p class="text-muted small mb-0">{{ 'CONTACTO.SOPORTE_TEXTO' | translate }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-7">
+      <div class="card p-4 border-0 shadow-sm bg-white rounded-4">
+        <h4 class="fw-bold text-success-dark mb-3">{{ 'CONTACTO.FORM_TITULO' | translate }}</h4>
+        <p class="text-muted small mb-4">{{ 'CONTACTO.FORM_DESCRIPCION' | translate }}</p>
+
+        <form (ngSubmit)="enviarAWhatsApp()">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label text-dark small fw-bold">{{ 'CONTACTO.NOMBRE_LABEL' | translate }}</label>
+              <input type="text" class="form-control custom-input" [(ngModel)]="nombre" name="nombre" [placeholder]="'CONTACTO.NOMBRE_PLACEHOLDER' | translate" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label text-dark small fw-bold">{{ 'CONTACTO.CORREO_LABEL' | translate }}</label>
+              <input type="email" class="form-control custom-input" [(ngModel)]="correo" name="correo" placeholder="contacto@entidad.org" required>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label text-dark small fw-bold">{{ 'CONTACTO.ASUNTO_LABEL' | translate }}</label>
+              <select class="form-select custom-input" [(ngModel)]="asunto" name="asunto">
+                <option value="Propuesta de Alianza">{{ 'CONTACTO.OPCION_ALIANZA' | translate }}</option>
+                <option value="Registro de Nueva Subárea">{{ 'CONTACTO.OPCION_SUBAREA' | translate }}</option>
+                <option value="Falla en Herramienta del Catálogo">{{ 'CONTACTO.OPCION_INCIDENCIA' | translate }}</option>
+                <option value="Consulta General">{{ 'CONTACTO.OPCION_CONSULTA' | translate }}</option>
+              </select>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label text-dark small fw-bold">{{ 'CONTACTO.MENSAJE_LABEL' | translate }}</label>
+              <textarea class="form-control custom-input" [(ngModel)]="mensaje" name="mensaje" rows="4" [placeholder]="'CONTACTO.MENSAJE_PLACEHOLDER' | translate" required></textarea>
+            </div>
+
+            <div class="col-12 mt-4">
+              <button type="submit" class="btn btn-success-agro w-100 py-2.5 fw-bold d-flex align-items-center justify-content-center gap-2">
+                <i class="bi bi-whatsapp"></i> {{ 'CONTACTO.BOTON_ENVIAR' | translate }}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,215 @@
+﻿<section class="perfil-page">
+  @if (cargando()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Cargando perfil del investigador...</p>
+    </div>
+  } @else {
+    @if (error()) {
+      <div class="alert-error">
+        {{ error() }}
+      </div>
+    }
+
+    @if (perfil(); as investigador) {
+      <div class="perfil-layout">
+        <aside class="identity-card">
+          <div class="avatar">
+            {{ obtenerInicial(investigador.nombreCompleto) }}
+          </div>
+
+          <h1>{{ investigador.nombreCompleto }}</h1>
+          <p class="correo">{{ investigador.correo }}</p>
+
+          <div class="info-list">
+            <div>
+              <span>Institución</span>
+              <strong>{{ investigador.institucion }}</strong>
+            </div>
+
+            <div>
+              <span>Línea de enfoque</span>
+              <strong>{{ investigador.lineaEnfoque }}</strong>
+            </div>
+          </div>
+
+          <div class="profile-links">
+            @if (tieneOrcid(investigador.orcid)) {
+              <a [href]="investigador.orcid" target="_blank" rel="noopener noreferrer">
+                ORCID
+              </a>
+            } @else {
+              <span>ORCID no registrado</span>
+            }
+
+            @if (tieneCvlac(investigador.cvlac)) {
+              <a [href]="investigador.cvlac" target="_blank" rel="noopener noreferrer">
+                CvLac
+              </a>
+            } @else {
+              <span>CvLac no registrado</span>
+            }
+          </div>
+
+          <button class="btn-edit" type="button" (click)="activarEdicion()">
+            Editar Datos Profesionales
+          </button>
+        </aside>
+
+        <main class="content-panel">
+          @if (!editando()) {
+            <section class="skills-panel">
+              <div class="panel-header">
+                <span>Perfil académico</span>
+                <h2>Competencias Científicas</h2>
+                <p>
+                  Indicadores profesionales asociados a la experiencia investigativa,
+                  tecnológica y metodológica del usuario.
+                </p>
+              </div>
+
+              @if (investigador.competencias.length > 0) {
+                <div class="skills-list">
+                  @for (competencia of investigador.competencias; track competencia.nombre) {
+                    <article class="skill-item">
+                      <div class="skill-top">
+                        <strong>{{ competencia.nombre }}</strong>
+                        <span>{{ competencia.porcentaje }}%</span>
+                      </div>
+
+                      <div class="progress-track">
+                        <div
+                          class="progress-fill"
+                          [style.width.%]="competencia.porcentaje">
+                        </div>
+                      </div>
+                    </article>
+                  }
+                </div>
+              } @else {
+                <p class="empty-text">
+                  Aún no hay competencias científicas registradas para este perfil.
+                </p>
+              }
+            </section>
+          } @else {
+            @if (formulario(); as form) {
+              <form class="edit-panel" (ngSubmit)="guardarPerfil()">
+                <div class="panel-header">
+                  <span>Edición profesional</span>
+                  <h2>Actualizar Perfil del Investigador</h2>
+                  <p>
+                    Los cambios se guardarán directamente en la sesión local del sistema.
+                  </p>
+                </div>
+
+                <div class="form-grid">
+                  <label>
+                    Nombre completo
+                    <input
+                      type="text"
+                      [ngModel]="form.nombreCompleto"
+                      name="nombreCompleto"
+                      (ngModelChange)="actualizarCampo('nombreCompleto', $event)"
+                    />
+                  </label>
+
+                  <label>
+                    Correo
+                    <input
+                      type="email"
+                      [ngModel]="form.correo"
+                      name="correo"
+                      readonly
+                    />
+                  </label>
+
+                  <label>
+                    Institución
+                    <input
+                      type="text"
+                      [ngModel]="form.institucion"
+                      name="institucion"
+                      (ngModelChange)="actualizarCampo('institucion', $event)"
+                    />
+                  </label>
+
+                  <label>
+                    Línea de enfoque
+                    <input
+                      type="text"
+                      [ngModel]="form.lineaEnfoque"
+                      name="lineaEnfoque"
+                      (ngModelChange)="actualizarCampo('lineaEnfoque', $event)"
+                    />
+                  </label>
+
+                  <label>
+                    ORCID
+                    <input
+                      type="url"
+                      [ngModel]="form.orcid"
+                      name="orcid"
+                      (ngModelChange)="actualizarCampo('orcid', $event)"
+                    />
+                  </label>
+
+                  <label>
+                    CvLac
+                    <input
+                      type="url"
+                      [ngModel]="form.cvlac"
+                      name="cvlac"
+                      (ngModelChange)="actualizarCampo('cvlac', $event)"
+                    />
+                  </label>
+                </div>
+
+                @if (form.competencias.length > 0) {
+                  <div class="ranges-section">
+                    <h3>Competencias científicas</h3>
+
+                    @for (competencia of form.competencias; track competencia.nombre; let i = $index) {
+                      <div class="range-item">
+                        <div class="range-header">
+                          <label [for]="'competencia-' + i">
+                            {{ competencia.nombre }}
+                          </label>
+                          <span>{{ competencia.porcentaje }}%</span>
+                        </div>
+
+                        <input
+                          type="range"
+                          min="0"
+                          max="100"
+                          [id]="'competencia-' + i"
+                          [ngModel]="competencia.porcentaje"
+                          [name]="'competencia-' + i"
+                          (ngModelChange)="actualizarCompetencia(i, +$event)"
+                        />
+                      </div>
+                    }
+                  </div>
+                }
+
+                <div class="form-actions">
+                  <button class="btn-secondary" type="button" (click)="cancelarEdicion()">
+                    Cancelar
+                  </button>
+
+                  <button class="btn-save" type="submit" [disabled]="guardando()">
+                    @if (guardando()) {
+                      Guardando...
+                    } @else {
+                      Guardar Cambios
+                    }
+                  </button>
+                </div>
+              </form>
+            }
+          }
+        </main>
+      </div>
+    }
+  }
+</section>

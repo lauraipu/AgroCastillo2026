@@ -1,0 +1,64 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# 🐳 DOCKERFILE - BACKEND (Spring Boot)
+# ═══════════════════════════════════════════════════════════════════════════════
+# Compilación multi-etapa:
+# 1. Stage BUILD: Compilar JAR
+# 2. Stage RUNTIME: Ejecutar JAR en imagen ligera
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ─────────────────────────────────────────────────────────────────────────────
+# STAGE 1: BUILD
+# ─────────────────────────────────────────────────────────────────────────────
+
+FROM maven:3.9.4-eclipse-temurin-17-alpine AS build
+
+WORKDIR /app
+
+# Copiar pom.xml y descargar dependencias (capa cacheable)
+COPY AgroCastillo-backend/pom.xml .
+RUN mvn dependency:go-offline -B
+
+# Copiar código fuente
+COPY AgroCastillo-backend/src ./src
+
+# Compilar y generar JAR
+RUN mvn clean package -DskipTests -q
+
+# ─────────────────────────────────────────────────────────────────────────────
+# STAGE 2: RUNTIME
+# ─────────────────────────────────────────────────────────────────────────────
+
+FROM eclipse-temurin:17-jre-alpine
+
+WORKDIR /app
+
+# Instalaciones necesarias
+RUN apk add --no-cache curl
+
+# Copiar JAR desde stage BUILD
+COPY --from=build /app/target/*.jar app.jar
+
+# Crear usuario no-root (seguridad)
+RUN addgroup -g 1000 appuser && \
+    adduser -D -u 1000 -G appuser appuser && \
+    chown -R appuser:appuser /app
+
+USER appuser
+
+# ─────────────────────────────────────────────────────────────────────────────
+# CONFIGURACIÓN DE PUERTO Y COMANDO
+# ─────────────────────────────────────────────────────────────────────────────
+
+EXPOSE 8443
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f -k https://localhost:8443/api/health || exit 1
+
+# Ejecutar aplicación con variables de entorno
+ENTRYPOINT ["java", "-jar", "app.jar"]
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# BUILD: docker build -f Dockerfile.backend -t agrocastillo-backend:1.0 .
+# RUN:   docker run -p 8443:8443 --env-file .env.local agrocastillo-backend:1.0
+# ═══════════════════════════════════════════════════════════════════════════════

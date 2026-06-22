@@ -1,0 +1,235 @@
+<section class="login-wrapper">
+
+  <div class="login-card">
+
+    <div class="login-brand">
+
+      <div class="brand-icon">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M24 4C24 4 10 14 10 26C10 33.732 16.268 40 24 40C31.732 40 38 33.732 38 26C38 14 24 4 24 4Z" fill="var(--ac-accent)" opacity="0.85"/>
+          <path d="M24 12C24 12 15 19 15 27C15 31.971 19.029 36 24 36C28.971 36 33 31.971 33 27C33 19 24 12 24 12Z" fill="var(--ac-nav-deep)"/>
+          <circle cx="24" cy="27" r="5" fill="var(--ac-gold-soft)"/>
+        </svg>
+      </div>
+
+      <h1 class="brand-name">AgroCastillo</h1>
+
+      <p class="brand-tagline">
+        {{ 'LOGIN.TAGLINE' | translate }}
+      </p>
+
+    </div>
+
+    <div class="divider-label">
+      <span>{{ 'LOGIN.ACCESO' | translate }}</span>
+    </div>
+
+    <div class="google-btn-wrapper">
+
+      <button
+        type="button"
+        class="google-login-button"
+        aria-label="Google Login"
+        (click)="loginConGoogle()">
+
+        {{ 'LOGIN.GOOGLE' | translate }}
+
+      </button>
+
+    </div>
+
+    <div class="separator">
+      <span>{{ 'LOGIN.O_CORREO' | translate }}</span>
+    </div>
+
+    <form
+      [formGroup]="loginForm"
+      (ngSubmit)="iniciarSesion()"
+      novalidate>
+
+      <div class="field-group">
+
+        <label for="correo" class="field-label">
+          {{ 'LOGIN.CORREO' | translate }}
+        </label>
+
+        <div
+          class="input-wrapper"
+          [class.input-error]="correo.invalid && correo.touched"
+          [class.input-valid]="correo.valid && correo.touched">
+
+          <svg class="input-icon" viewBox="0 0 20 20" fill="none">
+            <path d="M2.5 5.833A1.667 1.667 0 014.167 4.167h11.666A1.667 1.667 0 0117.5 5.833v8.334a1.667 1.667 0 01-1.667 1.666H4.167A1.667 1.667 0 012.5 14.167V5.833z" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M2.5 5.833l7.5 5 7.5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+
+          <input
+            id="correo"
+            type="email"
+            class="field-input"
+            formControlName="correo"
+            placeholder="{{ 'LOGIN.CORREO_PLACEHOLDER' | translate }}"
+            autocomplete="email"
+          />
+
+        </div>
+
+        @if (correo.invalid && correo.touched) {
+
+          <p class="field-error">
+
+            @if (correo.errors?.['required']) {
+              {{ 'LOGIN.ERROR_CORREO_REQUIRED' | translate }}
+            }
+
+            @if (correo.errors?.['email']) {
+              {{ 'LOGIN.ERROR_CORREO_INVALIDO' | translate }}
+            }
+
+          </p>
+
+        }
+
+      </div>
+
+      <div class="field-group">
+
+        <div class="label-row">
+
+          <label for="contrasena" class="field-label">
+            {{ 'LOGIN.CONTRASENA' | translate }}
+          </label>
+
+          <a href="#" class="forgot-link" tabindex="-1">
+            {{ 'LOGIN.OLVIDO' | translate }}
+          </a>
+
+        </div>
+
+        <div
+          class="input-wrapper"
+          [class.input-error]="contrasena.invalid && contrasena.touched"
+          [class.input-valid]="contrasena.valid && contrasena.touched">
+
+          <svg class="input-icon" viewBox="0 0 20 20" fill="none">
+            <rect x="3.333" y="9.167" width="13.334" height="8.333" rx="1.667" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M6.667 9.167V6.667a3.333 3.333 0 016.666 0v2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="10" cy="13.333" r="1.25" fill="currentColor"/>
+          </svg>
+
+          <input
+            id="contrasena"
+            [type]="mostrarContrasena() ? 'text' : 'password'"
+            class="field-input"
+            formControlName="contrasena"
+            placeholder="{{ 'LOGIN.CONTRASENA_PLACEHOLDER' | translate }}"
+            autocomplete="current-password"
+          />
+
+          <button
+            type="button"
+            class="toggle-password"
+            (click)="toggleMostrarContrasena()">
+
+            @if (!mostrarContrasena()) {
+
+              <svg viewBox="0 0 20 20" fill="none">
+                <path d="M10 4.167C5.833 4.167 2.275 6.825 1.25 10c1.025 3.175 4.583 5.833 8.75 5.833S18.725 13.175 19.75 10C18.725 6.825 15.167 4.167 10 4.167z" stroke="currentColor" stroke-width="1.5"/>
+                <circle cx="10" cy="10" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+
+            }
+
+            @if (mostrarContrasena()) {
+
+              <svg viewBox="0 0 20 20" fill="none">
+                <path d="M2.5 2.5l15 15M8.578 8.578A2.5 2.5 0 0012.5 12.5M6.25 5.358C4.27 6.396 2.73 7.995 1.875 10c1.125 2.917 4.375 5.417 8.125 5.417a9.14 9.14 0 003.542-.717M10 4.583c.417 0 .833.042 1.25.108C13.875 5.2 16.125 7.325 17.5 10a9.8 9.8 0 01-1.667 2.567" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+
+            }
+
+          </button>
+
+        </div>
+
+        @if (contrasena.invalid && contrasena.touched) {
+
+          <p class="field-error">
+
+            @if (contrasena.errors?.['required']) {
+              {{ 'LOGIN.ERROR_PASSWORD_REQUIRED' | translate }}
+            }
+
+            @if (contrasena.errors?.['minlength']) {
+              {{ 'LOGIN.ERROR_PASSWORD_MIN' | translate }}
+            }
+
+          </p>
+
+        }
+
+      </div>
+
+      @if (errorMensaje()) {
+
+        <div class="alert-error" role="alert">
+
+          <svg viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="8.333" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M10 6.667v3.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="10" cy="13.333" r="0.833" fill="currentColor"/>
+          </svg>
+
+          <span>{{ errorMensaje() }}</span>
+
+        </div>
+
+      }
+
+      <button
+        type="submit"
+        class="btn-submit"
+        [disabled]="formularioInvalido">
+
+        @if (!cargando()) {
+          <span>{{ 'LOGIN.BOTON' | translate }}</span>
+        }
+
+        @if (cargando()) {
+
+          <span class="spinner-row">
+            <span class="spinner"></span>
+            {{ 'LOGIN.VERIFICANDO' | translate }}
+          </span>
+
+        }
+
+      </button>
+
+    </form>
+
+    <div class="login-footer-links">
+
+      <p class="login-footer">
+        {{ 'LOGIN.NO_CUENTA' | translate }}
+
+        <a routerLink="/registro">
+          {{ 'LOGIN.CREAR_CUENTA' | translate }}
+        </a>
+      </p>
+
+      <p class="login-footer">
+
+        {{ 'LOGIN.ACCESO_INSTITUCIONAL' | translate }}
+
+        <a href="mailto:admin@agrocastillo.com">
+          {{ 'LOGIN.ADMINISTRADOR' | translate }}
+        </a>
+
+      </p>
+
+    </div>
+
+  </div>
+
+</section>

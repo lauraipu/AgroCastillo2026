@@ -1,0 +1,356 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600;700;800&display=swap');
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: #f8f7f2;
+  background-image:
+    radial-gradient(circle, rgba(31, 63, 44, 0.06) 1px, transparent 1px);
+  background-size: 26px 26px;
+  font-family: 'Inter', sans-serif;
+  color: #16251b;
+}
+
+/* =========================
+   CONTENEDOR GENERAL
+========================= */
+
+.container {
+  max-width: 1180px;
+  padding: 2rem 1rem;
+}
+
+/* =========================
+   ENCABEZADO
+========================= */
+
+.text-center.mb-5 {
+  position: relative;
+  margin-bottom: 1.7rem !important;
+  padding: 2.4rem 2.5rem;
+
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(31, 63, 44, 0.12);
+  border-radius: 24px;
+
+  box-shadow:
+    0 24px 55px rgba(25, 45, 35, 0.1),
+    0 8px 18px rgba(25, 45, 35, 0.05);
+
+  overflow: hidden;
+}
+
+.text-center.mb-5::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 4%;
+  width: 92%;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #1f3f2c, #b18a46, #1f3f2c);
+}
+
+.tracking-wider {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+
+  font-size: 0.72rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 1.7px;
+  text-transform: uppercase;
+
+  color: #b18a46 !important;
+}
+
+.display-4 {
+  margin: 0;
+
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.2rem, 4vw, 3.7rem);
+  line-height: 0.95;
+  letter-spacing: -1px;
+
+  color: #15291d !important;
+}
+
+.lead {
+  max-width: 760px;
+  margin: 1rem auto 0;
+
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #5e6c63 !important;
+}
+
+/* =========================
+   TARJETAS
+========================= */
+
+.card {
+  position: relative;
+
+  border: 1px solid rgba(31, 63, 44, 0.12) !important;
+  border-radius: 24px !important;
+
+  background: rgba(255, 255, 255, 0.96) !important;
+
+  box-shadow:
+    0 18px 38px rgba(25, 45, 35, 0.08),
+    0 6px 14px rgba(25, 45, 35, 0.04) !important;
+
+  overflow: hidden;
+  transition: all 0.25s ease;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 8%;
+  width: 84%;
+  height: 3px;
+
+  border-radius: 999px;
+  background: linear-gradient(90deg, #1f3f2c, #b18a46, #1f3f2c);
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(177, 138, 70, 0.48) !important;
+  box-shadow:
+    0 24px 48px rgba(25, 45, 35, 0.12),
+    0 8px 18px rgba(25, 45, 35, 0.06) !important;
+}
+
+.card h4 {
+  position: relative;
+  z-index: 1;
+
+  margin-bottom: 1.4rem !important;
+
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.9rem;
+  line-height: 1;
+
+  color: #15291d !important;
+}
+
+.text-success-dark {
+  color: #1f3f2c !important;
+}
+
+.card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================
+   CANALES DIRECTOS
+========================= */
+
+.icon-box {
+  width: 48px;
+  min-width: 48px;
+  height: 48px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 14px !important;
+
+  background: #f6f7f4 !important;
+  border: 1px solid rgba(31, 63, 44, 0.1);
+
+  box-shadow: 0 8px 18px rgba(25, 45, 35, 0.06);
+}
+
+.icon-box i {
+  color: #1f3f2c;
+}
+
+.icon-box.text-primary i {
+  color: #2d4775;
+}
+
+.icon-box.text-danger i {
+  color: #9b3c3c;
+}
+
+.card h6 {
+  color: #15291d !important;
+  font-size: 0.93rem;
+}
+
+.card p,
+.text-muted {
+  color: #5e6c63 !important;
+  line-height: 1.65;
+}
+
+.small {
+  font-size: 0.86rem !important;
+}
+
+/* =========================
+   FORMULARIO
+========================= */
+
+form {
+  position: relative;
+  z-index: 1;
+}
+
+.form-label {
+  margin-bottom: 0.45rem;
+
+  color: #15291d !important;
+  font-size: 0.8rem !important;
+  font-weight: 800 !important;
+}
+
+.custom-input {
+  width: 100%;
+
+  min-height: 48px;
+  padding: 0.75rem 1rem;
+
+  border: 1.5px solid rgba(31, 63, 44, 0.28) !important;
+  border-radius: 14px !important;
+  outline: none;
+
+  background: #ffffff !important;
+  color: #16251b !important;
+
+  font-family: 'Inter', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 500;
+
+  box-shadow: none !important;
+  transition: all 0.25s ease;
+}
+
+.custom-input::placeholder {
+  color: #8a968f;
+}
+
+.custom-input:focus {
+  border-color: #b18a46 !important;
+  box-shadow: 0 0 0 4px rgba(177, 138, 70, 0.14) !important;
+}
+
+textarea.custom-input {
+  min-height: 128px;
+  resize: vertical;
+}
+
+.form-select.custom-input {
+  cursor: pointer;
+}
+
+/* =========================
+   BOTÓN WHATSAPP
+========================= */
+
+.btn-success-agro {
+  min-height: 48px;
+
+  border: none !important;
+  border-radius: 14px !important;
+
+  background: linear-gradient(135deg, #1f3f2c, #2f6042) !important;
+  color: #ffffff !important;
+
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 800 !important;
+  letter-spacing: 0.2px;
+
+  box-shadow: 0 12px 24px rgba(31, 63, 44, 0.18);
+  transition: all 0.22s ease;
+}
+
+.btn-success-agro:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 30px rgba(31, 63, 44, 0.24);
+}
+
+.btn-success-agro:active {
+  transform: translateY(0);
+}
+
+.btn-success-agro i {
+  font-size: 1.1rem;
+}
+
+/* =========================
+   AJUSTES BOOTSTRAP
+========================= */
+
+.row.g-4 {
+  align-items: stretch;
+}
+
+.gap-3 {
+  gap: 1rem !important;
+}
+
+.mb-4 {
+  margin-bottom: 1.3rem !important;
+}
+
+.rounded-4 {
+  border-radius: 24px !important;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 992px) {
+  .col-lg-5,
+  .col-lg-7 {
+    width: 100%;
+  }
+}
+
+@media (max-width: 620px) {
+  .container {
+    padding: 1rem;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  .text-center.mb-5 {
+    padding: 2rem 1.3rem;
+    border-radius: 18px;
+  }
+
+  .display-4 {
+    font-size: 2.2rem;
+  }
+
+  .lead {
+    font-size: 0.93rem;
+  }
+
+  .card {
+    padding: 1.2rem !important;
+    border-radius: 18px !important;
+  }
+
+  .card h4 {
+    font-size: 1.65rem;
+  }
+
+  .d-flex.align-items-start {
+    align-items: flex-start !important;
+  }
+
+  .icon-box {
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+  }
+}

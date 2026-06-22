@@ -1,0 +1,14 @@
+<div class="card h-100 card-investigador shadow-sm">
+  <div class="card-body text-center p-4">
+    <div class="avatar-circle mx-auto mb-3">
+      {{ investigador?.nombre?.charAt(0).toUpperCase() }}
+    </div>
+    <h5 class="card-title text-white mb-1">{{ investigador?.nombre }}</h5>
+    <p class="text-gold small mb-3">{{ investigador?.especialidad || 'Investigador Agrícola' }}</p>
+    
+    <div class="border-top border-secondary pt-3 mt-3 text-start text-muted-agro">
+      <p class="mb-1 small"><strong>✉️ Correo:</strong> {{ investigador?.correo }}</p>
+      <p class="mb-0 small"><strong>🌾 Línea:</strong> {{ investigador?.lineaInvestigacion || 'Agroindustrial' }}</p>
+    </div>
+  </div>
+</div>

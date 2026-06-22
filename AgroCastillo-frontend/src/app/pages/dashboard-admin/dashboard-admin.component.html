@@ -1,0 +1,207 @@
+﻿<section class="admin-dashboard">
+  @if (cargando()) {
+    <section class="loading-panel">
+      <div class="spinner"></div>
+      <h2>Cargando panel administrativo</h2>
+      <p>Sincronizando métricas, aplicaciones, usuarios y reportes.</p>
+    </section>
+  } @else {
+    <header class="dashboard-header">
+      <span class="eyebrow">Gobernanza AgroCastillo</span>
+      <h1>Dashboard del Administrador</h1>
+      <p>
+        Centro de control para supervisar indicadores, aprobar herramientas científicas,
+        gestionar roles y auditar la actividad de la comunidad académica.
+      </p>
+    </header>
+
+    <section class="kpi-grid">
+      @for (kpi of kpis(); track kpi.titulo) {
+        <article class="kpi-card">
+          <span>{{ kpi.titulo }}</span>
+          <strong>{{ kpi.valor }}</strong>
+          <p>{{ kpi.descripcion }}</p>
+        </article>
+      }
+    </section>
+
+    <section class="approval-panel">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">Gobernanza de datos</span>
+          <h2>Módulo de Aprobación de Herramientas</h2>
+        </div>
+        <p>{{ aplicacionesPendientes().length }} registros en revisión</p>
+      </div>
+
+      <div class="approval-table">
+        <div class="table-head">
+          <span>Identificador</span>
+          <span>Software</span>
+          <span>Investigador</span>
+          <span>Sector</span>
+          <span>Documentación</span>
+          <span>Estándares</span>
+          <span>Moderación</span>
+        </div>
+
+        @for (app of aplicacionesPendientes(); track app.id) {
+          <article class="table-row">
+            <span class="code">{{ app.codigo }}</span>
+
+            <strong>{{ app.nombre }}</strong>
+
+            <span>{{ app.investigador }}</span>
+
+            <span class="sector">{{ app.sector }}</span>
+
+            <span
+              class="doc"
+              [class.ok]="app.documentacion === 'Completa'"
+              [class.review]="app.documentacion === 'En Revisión'"
+              [class.pending]="app.documentacion === 'Pendiente'">
+              {{ app.documentacion }}
+            </span>
+
+            <span
+              class="standard"
+              [class.valid]="app.cumpleEstandares"
+              [class.invalid]="!app.cumpleEstandares">
+              {{ app.cumpleEstandares ? 'Cumple' : 'Requiere ajuste' }}
+            </span>
+
+            <div class="actions">
+              <button
+                type="button"
+                class="approve"
+                (click)="aprobarAplicacion(app.id)">
+                Aprobar
+              </button>
+
+              <button
+                type="button"
+                class="reject"
+                (click)="rechazarAplicacion(app.id)">
+                Corregir
+              </button>
+            </div>
+          </article>
+        } @empty {
+          <div class="empty-state">
+            <h3>No hay aplicaciones pendientes</h3>
+            <p>Todos los registros enviados han sido revisados por administración.</p>
+          </div>
+        }
+      </div>
+    </section>
+
+    <section class="bottom-grid">
+      <article class="management-panel">
+        <div class="section-heading compact">
+          <div>
+            <span class="eyebrow">Control de acceso</span>
+            <h2>Gestión de Roles</h2>
+          </div>
+        </div>
+
+        <div class="users-list">
+          @for (usuario of usuarios(); track usuario.id) {
+            <div class="user-row">
+              <div>
+                <strong>{{ usuario.nombre }}</strong>
+                <span>{{ usuario.correo }}</span>
+              </div>
+
+              <div class="role-area">
+                <span class="role">{{ usuario.rol }}</span>
+                <span class="state" [class.disabled]="!usuario.activo">
+                  {{ usuario.activo ? 'Activo' : 'Inactivo' }}
+                </span>
+              </div>
+
+              <div class="user-actions">
+                <button type="button" (click)="promoverUsuario(usuario.id)">
+                  Promover
+                </button>
+
+                <button type="button" (click)="degradarUsuario(usuario.id)">
+                  Degradar
+                </button>
+
+                <button type="button" (click)="alternarEstadoUsuario(usuario.id)">
+                  Estado
+                </button>
+              </div>
+            </div>
+          } @empty {
+            <div class="empty-state">
+              <h3>No hay usuarios registrados</h3>
+            </div>
+          }
+        </div>
+      </article>
+
+      <article class="management-panel">
+        <div class="section-heading compact">
+          <div>
+            <span class="eyebrow">Auditoría de comunidad</span>
+            <h2>Moderación de Foros</h2>
+          </div>
+        </div>
+
+        <div class="filter-tabs">
+          <button
+            type="button"
+            [class.active]="filtroReportes() === 'Pendiente'"
+            (click)="cambiarFiltroReportes('Pendiente')">
+            Pendientes
+          </button>
+
+          <button
+            type="button"
+            [class.active]="filtroReportes() === 'Revisado'"
+            (click)="cambiarFiltroReportes('Revisado')">
+            Revisados
+          </button>
+
+          <button
+            type="button"
+            [class.active]="filtroReportes() === 'Todos'"
+            (click)="cambiarFiltroReportes('Todos')">
+            Todos
+          </button>
+        </div>
+
+        <div class="reports-list">
+          @for (reporte of reportesFiltrados(); track reporte.id) {
+            <div class="report-row">
+              <div>
+                <strong>{{ reporte.hilo }}</strong>
+                <span>{{ reporte.motivo }}</span>
+                <small>{{ reporte.autor }} · {{ reporte.fecha }}</small>
+              </div>
+
+              <div class="report-actions">
+                <span [class.reviewed]="reporte.estado === 'Revisado'">
+                  {{ reporte.estado }}
+                </span>
+
+                @if (reporte.estado === 'Pendiente') {
+                  <button
+                    type="button"
+                    (click)="marcarReporteRevisado(reporte.id)">
+                    Marcar revisado
+                  </button>
+                }
+              </div>
+            </div>
+          } @empty {
+            <div class="empty-state">
+              <h3>No hay reportes para este filtro</h3>
+            </div>
+          }
+        </div>
+      </article>
+    </section>
+  }
+</section>

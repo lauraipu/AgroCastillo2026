@@ -1,0 +1,215 @@
+version: '3.9'
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 🐳 DOCKER COMPOSE - AGROCASTILLO STACK COMPLETO
+# ═══════════════════════════════════════════════════════════════════════════════
+# Servicios:
+# - PostgreSQL: Base de Datos
+# - Backend: Spring Boot (Puerto 8443)
+# - Frontend: Angular + Nginx (Puerto 4200)
+#
+# Uso:
+#   docker-compose up -d          (Iniciar servicios)
+#   docker-compose down            (Detener servicios)
+#   docker-compose logs -f         (Ver logs)
+#   docker-compose ps              (Ver estado)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+services:
+
+  # ───────────────────────────────────────────────────────────────────────────
+  # 🗄️ POSTGRESQL - BASE DE DATOS
+  # ───────────────────────────────────────────────────────────────────────────
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: agrocastillo-postgres
+    
+    # Variables de entorno (desde .env.local)
+    environment:
+      POSTGRES_DB: ${DB_NAME:-AgroCastillo}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-admin123}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --locale=es_ES.UTF-8"
+    
+    # Puertos
+    ports:
+      - "5432:5432"
+    
+    # Volúmenes
+    volumes:
+      # Persistencia de datos
+      - postgres_data:/var/lib/postgresql/data
+      
+      # Scripts de inicialización (opcional)
+      # - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    
+    # Health check
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    
+    networks:
+      - agrocastillo-network
+    
+    # Seguridad
+    user: "postgres"
+    restart: unless-stopped
+
+  # ───────────────────────────────────────────────────────────────────────────
+  # ☕ BACKEND - SPRING BOOT
+  # ───────────────────────────────────────────────────────────────────────────
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: agrocastillo-backend
+    
+    # Variables de entorno
+    environment:
+      # Base de Datos
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-AgroCastillo}
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-admin123}
+      
+      # JWT
+      JWT_SECRET: ${JWT_SECRET:-agrocastillo-clave-secreta-muy-segura-minimo32chars}
+      JWT_EXPIRATION: ${JWT_EXPIRATION:-86400000}
+      
+      # Spring Boot
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${DB_NAME:-AgroCastillo}
+      
+      # Frontend URL (para CORS)
+      FRONTEND_URL: ${FRONTEND_URL:-https://localhost:4200}
+    
+    # Puertos
+    ports:
+      - "8443:8443"
+    
+    # Volúmenes
+    volumes:
+      # Logs (para debugging)
+      - ./logs/backend:/app/logs
+    
+    # Dependencias
+    depends_on:
+      postgres:
+        condition: service_healthy
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "curl", "-f", "-k", "https://localhost:8443/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
+    networks:
+      - agrocastillo-network
+    
+    restart: unless-stopped
+
+  # ───────────────────────────────────────────────────────────────────────────
+  # 🎨 FRONTEND - ANGULAR + NGINX
+  # ───────────────────────────────────────────────────────────────────────────
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: agrocastillo-frontend
+    
+    # Puertos
+    ports:
+      - "4200:4200"
+    
+    # Volúmenes
+    volumes:
+      # Logs (para debugging)
+      - ./logs/frontend:/var/log/nginx
+    
+    # Dependencias
+    depends_on:
+      - backend
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:4200/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    
+    networks:
+      - agrocastillo-network
+    
+    restart: unless-stopped
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# VOLÚMENES - Persistencia de Datos
+# ═══════════════════════════════════════════════════════════════════════════════
+
+volumes:
+  postgres_data:
+    driver: local
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# REDES - Comunicación entre Servicios
+# ═══════════════════════════════════════════════════════════════════════════════
+
+networks:
+  agrocastillo-network:
+    driver: bridge
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# CONFIGURACIÓN GENERAL
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Versión Docker Compose: 3.9+
+# Requisitos:
+#   - Docker Desktop 4.0+
+#   - Docker Engine 20.10+
+#   - Docker Compose 2.0+
+#
+# Variables de entorno se cargan desde .env.local o se puede usar:
+# export DB_PASSWORD="tu_password"
+# docker-compose up
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# COMANDOS ÚTILES
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Iniciar servicios en background
+# docker-compose up -d
+
+# Ver logs en tiempo real
+# docker-compose logs -f
+
+# Ver logs de un servicio específico
+# docker-compose logs -f backend
+# docker-compose logs -f frontend
+# docker-compose logs -f postgres
+
+# Ver estado de servicios
+# docker-compose ps
+
+# Detener servicios
+# docker-compose down
+
+# Eliminar volúmenes (CUIDADO: elimina base de datos)
+# docker-compose down -v
+
+# Ejecutar comando en contenedor
+# docker-compose exec backend bash
+# docker-compose exec postgres psql -U postgres -d AgroCastillo
+
+# Rebuild sin usar caché
+# docker-compose build --no-cache
+
+# ═══════════════════════════════════════════════════════════════════════════════

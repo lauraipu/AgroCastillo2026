@@ -1,0 +1,172 @@
+﻿<header class="ac-navbar-shell" role="banner">
+  <nav class="ac-navbar" aria-label="Navegación principal de AgroCastillo">
+    <a class="ac-brand" routerLink="/inicio" aria-label="Ir al inicio de AgroCastillo" (click)="cerrarTodo()">
+      <img src="logo.png" alt="Logo de AgroCastillo" class="ac-brand-logo" />
+      <span class="ac-brand-text">AgroCastillo</span>
+    </a>
+
+    <button
+      type="button"
+      class="ac-mobile-toggle"
+      aria-label="Abrir o cerrar menú principal"
+      [attr.aria-expanded]="menuMovilAbierto()"
+      aria-controls="ac-main-menu"
+      (click)="toggleMenuMovil($event)">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <div
+      id="ac-main-menu"
+      class="ac-navbar-content"
+      [class.ac-navbar-content-open]="menuMovilAbierto()">
+      <ul class="ac-nav-list">
+        @for (item of navItems; track item.route) {
+          <li>
+            <a
+              class="ac-nav-link"
+              [routerLink]="item.route"
+              routerLinkActive="ac-nav-active"
+              [routerLinkActiveOptions]="{ exact: item.route === '/inicio' }"
+              (click)="cerrarTodo()">
+              {{ item.label | translate }}
+            </a>
+          </li>
+        }
+      </ul>
+
+      <div class="ac-actions">
+        <div class="ac-settings" (click)="detenerCierre($event)">
+          <button
+            type="button"
+            class="ac-icon-button"
+            aria-label="Abrir configuración de idioma y accesibilidad"
+            [attr.aria-expanded]="panelConfiguracionAbierto()"
+            aria-controls="ac-settings-panel"
+            (click)="toggleConfiguracion($event)">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 15.5A3.5 3.5 0 1 0 12 8a3.5 3.5 0 0 0 0 7.5Z" />
+              <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.05.05a2.05 2.05 0 0 1-2.9 2.9l-.05-.05A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .93l-.03.08a2.05 2.05 0 0 1-3.94 0l-.03-.08a1.7 1.7 0 0 0-1-.93 1.7 1.7 0 0 0-1.87.34l-.05.05a2.05 2.05 0 0 1-2.9-2.9l.05-.05A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.93-1l-.08-.03a2.05 2.05 0 0 1 0-3.94l.08-.03a1.7 1.7 0 0 0 .93-1 1.7 1.7 0 0 0-.34-1.87l-.05-.05a2.05 2.05 0 0 1 2.9-2.9l.05.05A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.93l.03-.08a2.05 2.05 0 0 1 3.94 0l.03.08a1.7 1.7 0 0 0 1 .93 1.7 1.7 0 0 0 1.87-.34l.05-.05a2.05 2.05 0 0 1 2.9 2.9l-.05.05A1.7 1.7 0 0 0 19.4 9c.13.43.46.78.93 1l.08.03a2.05 2.05 0 0 1 0 3.94l-.08.03a1.7 1.7 0 0 0-.93 1Z" />
+            </svg>
+          </button>
+
+          @if (panelConfiguracionAbierto()) {
+            <section
+              id="ac-settings-panel"
+              class="ac-settings-panel"
+              aria-labelledby="ac-settings-title">
+              <h2 id="ac-settings-title">Configuración</h2>
+
+              <fieldset class="ac-fieldset">
+                <legend>Idioma</legend>
+                <div class="ac-language-grid">
+                  @for (idioma of idiomas; track idioma.value) {
+                    <button
+                      type="button"
+                      class="ac-language-option"
+                      [class.ac-language-active]="idiomaActual() === idioma.value"
+                      [attr.aria-pressed]="idiomaActual() === idioma.value"
+                      (click)="cambiarIdioma(idioma.value)">
+                      {{ idioma.label }}
+                    </button>
+                  }
+                </div>
+              </fieldset>
+
+              <fieldset class="ac-fieldset">
+                <legend>Accesibilidad</legend>
+
+                <button
+                  type="button"
+                  class="ac-toggle-row"
+                  [attr.aria-pressed]="altoContraste()"
+                  (click)="toggleAltoContraste()">
+                  <span>Alto contraste</span>
+                  <span class="ac-switch" [class.ac-switch-on]="altoContraste()"></span>
+                </button>
+
+                <button
+                  type="button"
+                  class="ac-toggle-row"
+                  [attr.aria-pressed]="textoGrande()"
+                  (click)="toggleTextoGrande()">
+                  <span>Texto grande</span>
+                  <span class="ac-switch" [class.ac-switch-on]="textoGrande()"></span>
+                </button>
+
+                <button
+                  type="button"
+                  class="ac-toggle-row"
+                  [attr.aria-pressed]="reducirMovimiento()"
+                  (click)="toggleReducirMovimiento()">
+                  <span>Reducir movimiento</span>
+                  <span class="ac-switch" [class.ac-switch-on]="reducirMovimiento()"></span>
+                </button>
+              </fieldset>
+            </section>
+          }
+        </div>
+
+        @if (!loggedIn()) {
+          <div class="ac-auth-actions">
+            <button type="button" class="ac-login-btn" (click)="irLogin()">
+              Entrar
+            </button>
+            <button type="button" class="ac-register-btn" (click)="irRegistro()">
+              Registro
+            </button>
+          </div>
+        }
+
+        @if (loggedIn() && usuario()) {
+          <div class="ac-profile" (click)="detenerCierre($event)">
+            <button
+              type="button"
+              class="ac-profile-button"
+              aria-label="Abrir menú de perfil"
+              [attr.aria-expanded]="menuUsuarioAbierto()"
+              aria-controls="ac-profile-menu"
+              (click)="toggleMenuUsuario($event)">
+              <span class="ac-avatar" aria-hidden="true">{{ inicial() }}</span>
+            </button>
+
+            @if (menuUsuarioAbierto()) {
+              <section id="ac-profile-menu" class="ac-profile-menu" role="menu" aria-label="Opciones de usuario">
+                <div class="ac-profile-header">
+                  <strong>{{ usuario()?.nombre }}</strong>
+                  <span>{{ rol() }}</span>
+                </div>
+
+                @if (rol() === ROL.ADMIN) {
+                  <button type="button" role="menuitem" class="ac-menu-item" (click)="irDashboard()">
+                    Dashboard
+                  </button>
+                }
+
+                @if (rol() === ROL.INVESTIGADOR) {
+                  <button type="button" role="menuitem" class="ac-menu-item" (click)="irPerfil()">
+                    Ver perfil
+                  </button>
+                  <button type="button" role="menuitem" class="ac-menu-item" (click)="irMisAplicaciones()">
+                    Mis aplicaciones
+                  </button>
+                }
+
+                @if (rol() === ROL.USUARIO) {
+                  <button type="button" role="menuitem" class="ac-menu-item" (click)="irPerfil()">
+                    Ver perfil
+                  </button>
+                }
+
+                <button type="button" role="menuitem" class="ac-menu-item ac-danger" (click)="cerrarSesion()">
+                  Cerrar sesión
+                </button>
+              </section>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </nav>
+</header>

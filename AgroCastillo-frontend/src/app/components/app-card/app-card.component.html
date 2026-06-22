@@ -1,0 +1,17 @@
+﻿<div class="card h-100 card-software shadow-sm">
+  <div class="card-body d-flex flex-column p-4">
+    <div class="d-flex justify-content-between align-items-start mb-2">
+      <h5 class="card-title text-white mb-0 text-truncate">{{ aplicacion?.nombre }}</h5>
+      <span class="badge bg-green-pastel text-dark font-monospace" style="font-size: 0.75rem;">v{{ aplicacion?.version || '1.0' }}</span>
+    </div>
+    <p class="card-text text-muted-agro small flex-grow-1 line-clamp">
+      {{ aplicacion?.descripcion }}
+    </p>
+    <div class="mt-3 pt-3 border-top border-secondary d-flex justify-content-between align-items-center">
+      <span class="text-green-pastel small">⭐ {{ aplicacion?.calificacionMedia || '5.0' }}</span>
+      <button class="btn btn-sm btn-outline-green" [routerLink]="['/detalle-aplicacion', aplicacion?.id]">
+        Ver Detalles
+      </button>
+    </div>
+  </div>
+</div>

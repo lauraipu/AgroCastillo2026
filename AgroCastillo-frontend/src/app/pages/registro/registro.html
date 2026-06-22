@@ -1,0 +1,431 @@
+```html
+<section class="register-wrapper">
+
+  <div class="register-card" [class.card-exitoso]="exitoso()">
+
+    @if (exitoso()) {
+      <div class="success-screen">
+        <div class="success-icon">
+          <svg viewBox="0 0 56 56" fill="none">
+            <circle cx="28" cy="28" r="26" stroke="var(--ac-accent)" stroke-width="2" stroke-dasharray="163" stroke-dashoffset="0" class="success-circle"/>
+            <path d="M17 28.5l8 8 14-16" stroke="var(--ac-accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="success-check"/>
+          </svg>
+        </div>
+
+        <h2 class="success-title">{{ 'REGISTRO.EXITO_TITULO' | translate }}</h2>
+        <p class="success-msg">{{ 'REGISTRO.EXITO_MENSAJE' | translate }}</p>
+
+        <div class="success-loader">
+          <div class="success-loader-bar"></div>
+        </div>
+      </div>
+    }
+
+    @if (!exitoso()) {
+      <ng-container>
+
+        <div class="register-brand">
+          <div class="brand-icon">
+            <svg viewBox="0 0 48 48" fill="none">
+              <path d="M24 4C24 4 10 14 10 26C10 33.732 16.268 40 24 40C31.732 40 38 33.732 38 26C38 14 24 4 24 4Z" fill="var(--ac-accent)" opacity="0.85"/>
+              <path d="M24 12C24 12 15 19 15 27C15 31.971 19.029 36 24 36C28.971 36 33 31.971 33 27C33 19 24 12 24 12Z" fill="var(--ac-nav-deep)"/>
+              <circle cx="24" cy="27" r="5" fill="var(--ac-gold-soft)"/>
+            </svg>
+          </div>
+
+          <h1 class="brand-name">{{ 'REGISTRO.TITULO' | translate }}</h1>
+          <p class="brand-tagline">{{ 'REGISTRO.SUBTITULO' | translate }}</p>
+        </div>
+
+        <div class="google-btn-wrapper" style="display: flex; justify-content: center; width: 100%; margin-bottom: 1.25rem;">
+          <button
+            type="button"
+            class="google-login-button"
+            [attr.aria-label]="'REGISTRO.GOOGLE_ARIA' | translate"
+            (click)="loginConGoogle()">
+            {{ 'REGISTRO.GOOGLE' | translate }}
+          </button>
+        </div>
+
+        <div class="separator">
+          <span>{{ 'REGISTRO.SEPARADOR' | translate }}</span>
+        </div>
+
+        <div class="steps-indicator">
+          <div class="step-item" [class.step-active]="pasoActual() === 1" [class.step-done]="pasoActual() === 2">
+            <div class="step-dot">
+              @if (pasoActual() === 2) {
+                <svg viewBox="0 0 12 12" fill="none">
+                  <path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              }
+
+              @if (pasoActual() === 1) {
+                <span>1</span>
+              }
+            </div>
+
+            <span class="step-label">{{ 'REGISTRO.PASO_PERFIL' | translate }}</span>
+          </div>
+
+          <div class="step-connector" [class.connector-done]="pasoActual() === 2"></div>
+
+          <div class="step-item" [class.step-active]="pasoActual() === 2">
+            <div class="step-dot"><span>2</span></div>
+            <span class="step-label">{{ 'REGISTRO.PASO_SEGURIDAD' | translate }}</span>
+          </div>
+        </div>
+
+        <form [formGroup]="registroForm" (ngSubmit)="registrar()" novalidate>
+
+          <div class="form-paso" [class.paso-visible]="pasoActual() === 1" [class.paso-oculto]="pasoActual() === 2">
+
+            <div class="field-group">
+              <label for="nombre" class="field-label">
+                {{ 'REGISTRO.NOMBRE' | translate }}
+              </label>
+
+              <div class="input-wrapper"
+                   [class.input-error]="nombre.invalid && nombre.touched"
+                   [class.input-valid]="nombre.valid && nombre.touched">
+                <svg class="input-icon" viewBox="0 0 20 20" fill="none">
+                  <circle cx="10" cy="7" r="3.333" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M3.333 17.5c0-3.682 2.985-6.667 6.667-6.667s6.667 2.985 6.667 6.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+
+                <input
+                  id="nombre"
+                  type="text"
+                  class="field-input"
+                  formControlName="nombre"
+                  [placeholder]="'REGISTRO.NOMBRE_PLACEHOLDER' | translate"
+                  autocomplete="name"
+                />
+              </div>
+
+              @if (nombre.invalid && nombre.touched) {
+                <p class="field-error">
+                  @if (nombre.errors?.['required']) {
+                    {{ 'REGISTRO.ERROR_NOMBRE_REQUIRED' | translate }}
+                  }
+
+                  @if (nombre.errors?.['minlength']) {
+                    {{ 'REGISTRO.ERROR_NOMBRE_MIN' | translate }}
+                  }
+                </p>
+              }
+            </div>
+
+            <div class="field-group">
+              <label for="email" class="field-label">
+                {{ 'REGISTRO.CORREO' | translate }}
+              </label>
+
+              <div class="input-wrapper"
+                   [class.input-error]="email.invalid && email.touched"
+                   [class.input-valid]="email.valid && email.touched">
+                <svg class="input-icon" viewBox="0 0 20 20" fill="none">
+                  <path d="M2.5 5.833A1.667 1.667 0 014.167 4.167h11.666A1.667 1.667 0 0117.5 5.833v8.334a1.667 1.667 0 01-1.667 1.666H4.167A1.667 1.667 0 012.5 14.167V5.833z" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M2.5 5.833l7.5 5 7.5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+
+                <input
+                  id="email"
+                  type="email"
+                  class="field-input"
+                  formControlName="email"
+                  [placeholder]="'REGISTRO.CORREO_PLACEHOLDER' | translate"
+                  autocomplete="email"
+                />
+              </div>
+
+              @if (email.invalid && email.touched) {
+                <p class="field-error">
+                  @if (email.errors?.['required']) {
+                    {{ 'REGISTRO.ERROR_CORREO_REQUIRED' | translate }}
+                  }
+
+                  @if (email.errors?.['email']) {
+                    {{ 'REGISTRO.ERROR_CORREO_INVALIDO' | translate }}
+                  }
+                </p>
+              }
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">
+                {{ 'REGISTRO.PERFIL_ACADEMICO' | translate }}
+              </label>
+
+              <div class="ocupacion-grid">
+                @for (op of ocupaciones; track op.valor) {
+                  <button
+                    type="button"
+                    class="ocupacion-card"
+                    [class.ocupacion-selected]="ocupacionCtrl.value === op.valor"
+                    (click)="seleccionarOcupacion(op.valor)">
+                    <div class="ocupacion-icon" [innerHTML]="op.icono"></div>
+                    <span class="ocupacion-label">{{ op.etiqueta }}</span>
+                    <span class="ocupacion-desc">{{ op.descripcion }}</span>
+
+                    <div class="ocupacion-check">
+                      <svg viewBox="0 0 14 14" fill="none">
+                        <path d="M2.5 7l3 3 6-6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </div>
+                  </button>
+                }
+              </div>
+
+              @if (ocupacionCtrl.invalid && ocupacionCtrl.touched) {
+                <p class="field-error">
+                  {{ 'REGISTRO.ERROR_PERFIL' | translate }}
+                </p>
+              }
+
+              @if (ocupacionSeleccionada) {
+                <div class="rol-badge">
+                  <svg viewBox="0 0 16 16" fill="none">
+                    <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.25"/>
+                    <path d="M8 5.5v3M8 10.5v.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
+                  </svg>
+
+                  <span>
+                    {{ 'REGISTRO.ROL_ASIGNADO' | translate }}
+                    <strong>{{ ocupacionCtrl.value === 'investigador' ? 'INVESTIGADOR' : 'USUARIO' }}</strong>
+                  </span>
+                </div>
+              }
+            </div>
+
+            <button type="button" class="btn-siguiente" [disabled]="!paso1Valido" (click)="avanzarPaso()">
+              {{ 'REGISTRO.CONTINUAR' | translate }}
+              <svg viewBox="0 0 20 20" fill="none">
+                <path d="M4.167 10h11.666M10.833 5.833L15 10l-4.167 4.167" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+
+          </div>
+
+          <div class="form-paso" [class.paso-visible]="pasoActual() === 2" [class.paso-oculto]="pasoActual() === 1">
+
+            @if (ocupacionSeleccionada) {
+              <div class="perfil-resumen">
+                <div class="perfil-resumen-icon" [innerHTML]="ocupacionSeleccionada.icono"></div>
+
+                <div class="perfil-resumen-info">
+                  <span class="perfil-resumen-nombre">{{ nombre.value }}</span>
+                  <span class="perfil-resumen-ocupacion">{{ ocupacionSeleccionada.etiqueta }}</span>
+                </div>
+
+                <button type="button" class="perfil-resumen-editar" (click)="retrocederPaso()">
+                  <svg viewBox="0 0 16 16" fill="none">
+                    <path d="M2 14l1.5-4.5L11 2l3 3-7.5 7.5L2 14z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"/>
+                  </svg>
+                  {{ 'REGISTRO.EDITAR' | translate }}
+                </button>
+              </div>
+            }
+
+            <div class="field-group">
+              <label for="password" class="field-label">
+                {{ 'REGISTRO.PASSWORD' | translate }}
+              </label>
+
+              <div class="input-wrapper"
+                   [class.input-error]="password.invalid && password.touched"
+                   [class.input-valid]="password.valid && password.touched">
+                <svg class="input-icon" viewBox="0 0 20 20" fill="none">
+                  <rect x="3.333" y="9.167" width="13.334" height="8.333" rx="1.667" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M6.667 9.167V6.667a3.333 3.333 0 016.666 0v2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  <circle cx="10" cy="13.333" r="1.25" fill="currentColor"/>
+                </svg>
+
+                <input
+                  id="password"
+                  [type]="mostrarPassword() ? 'text' : 'password'"
+                  class="field-input"
+                  formControlName="password"
+                  [placeholder]="'REGISTRO.PASSWORD_PLACEHOLDER' | translate"
+                  autocomplete="new-password"
+                />
+
+                <button type="button" class="toggle-password" (click)="togglePassword()">
+                  @if (!mostrarPassword()) {
+                    <svg viewBox="0 0 20 20" fill="none">
+                      <path d="M10 4.167C5.833 4.167 2.275 6.825 1.25 10c1.025 3.175 4.583 5.833 8.75 5.833S18.725 13.175 19.75 10C18.725 6.825 15.167 4.167 10 4.167z" stroke="currentColor" stroke-width="1.5"/>
+                      <circle cx="10" cy="10" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+                    </svg>
+                  }
+
+                  @if (mostrarPassword()) {
+                    <svg viewBox="0 0 20 20" fill="none">
+                      <path d="M2.5 2.5l15 15M8.578 8.578A2.5 2.5 0 0012.5 12.5M6.25 5.358C4.27 6.396 2.73 7.995 1.875 10c1.125 2.917 4.375 5.417 8.125 5.417a9.14 9.14 0 003.542-.717M10 4.583c.417 0 .833.042 1.25.108C13.875 5.2 16.125 7.325 17.5 10a9.8 9.8 0 01-1.667 2.567" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                  }
+                </button>
+              </div>
+
+              @if (password.invalid && password.touched) {
+                <p class="field-error">
+                  @if (password.errors?.['required']) {
+                    {{ 'REGISTRO.ERROR_PASSWORD_REQUIRED' | translate }}
+                  }
+
+                  @if (password.errors?.['minlength']) {
+                    {{ 'REGISTRO.ERROR_PASSWORD_MIN' | translate }}
+                  }
+
+                  @if (password.errors?.['pattern']) {
+                    {{ 'REGISTRO.ERROR_PASSWORD_PATTERN' | translate }}
+                  }
+                </p>
+              }
+
+              @if (password.value) {
+                <div class="password-strength">
+                  <div class="strength-bars">
+                    <div class="strength-bar" [class.bar-filled]="password.value.length >= 8" [class.bar-weak]="password.value.length >= 8 && password.value.length < 12"></div>
+                    <div class="strength-bar" [class.bar-filled]="password.value.length >= 10 && !!password.value.match(/[A-Z]/)"></div>
+                    <div class="strength-bar" [class.bar-filled]="password.value.length >= 12 && !!password.value.match(/[A-Z]/) && !!password.value.match(/\d/)"></div>
+                  </div>
+
+                  <span class="strength-label"
+                        [class.label-weak]="password.value.length < 10"
+                        [class.label-medium]="password.value.length >= 10 && password.value.length < 12"
+                        [class.label-strong]="password.value.length >= 12 && !!password.value.match(/[A-Z]/) && !!password.value.match(/\d/)">
+                    {{
+                      password.value.length < 10
+                        ? ('REGISTRO.PASSWORD_DEBIL' | translate)
+                        : password.value.length < 12
+                          ? ('REGISTRO.PASSWORD_MEDIA' | translate)
+                          : ('REGISTRO.PASSWORD_FUERTE' | translate)
+                    }}
+                  </span>
+                </div>
+              }
+            </div>
+
+            <div class="field-group">
+              <label for="confirmarPassword" class="field-label">
+                {{ 'REGISTRO.CONFIRMAR_PASSWORD' | translate }}
+              </label>
+
+              <div class="input-wrapper"
+                   [class.input-error]="confirmarPassword.invalid && confirmarPassword.touched"
+                   [class.input-valid]="confirmarPassword.valid && confirmarPassword.touched">
+                <svg class="input-icon" viewBox="0 0 20 20" fill="none">
+                  <path d="M16.667 10.833V5.833a.833.833 0 00-.834-.833H4.167a.833.833 0 00-.834.833v8.334c0 .46.373.833.834.833h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  <path d="M13.333 16.667l1.667 1.666L18.333 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+
+                <input
+                  id="confirmarPassword"
+                  [type]="mostrarConfirmar() ? 'text' : 'password'"
+                  class="field-input"
+                  formControlName="confirmarPassword"
+                  [placeholder]="'REGISTRO.CONFIRMAR_PASSWORD_PLACEHOLDER' | translate"
+                  autocomplete="new-password"
+                />
+
+                <button type="button" class="toggle-password" (click)="toggleConfirmar()">
+                  @if (!mostrarConfirmar()) {
+                    <svg viewBox="0 0 20 20" fill="none">
+                      <path d="M10 4.167C5.833 4.167 2.275 6.825 1.25 10c1.025 3.175 4.583 5.833 8.75 5.833S18.725 13.175 19.75 10C18.725 6.825 15.167 4.167 10 4.167z" stroke="currentColor" stroke-width="1.5"/>
+                      <circle cx="10" cy="10" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+                    </svg>
+                  }
+
+                  @if (mostrarConfirmar()) {
+                    <svg viewBox="0 0 20 20" fill="none">
+                      <path d="M2.5 2.5l15 15M8.578 8.578A2.5 2.5 0 0012.5 12.5M6.25 5.358C4.27 6.396 2.73 7.995 1.875 10c1.125 2.917 4.375 5.417 8.125 5.417a9.14 9.14 0 003.542-.717M10 4.583c.417 0 .833.042 1.25.108C13.875 5.2 16.125 7.325 17.5 10a9.8 9.8 0 01-1.667 2.567" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                  }
+                </button>
+              </div>
+
+              @if (confirmarPassword.invalid && confirmarPassword.touched) {
+                <p class="field-error">
+                  @if (confirmarPassword.errors?.['required']) {
+                    {{ 'REGISTRO.ERROR_CONFIRMAR_REQUIRED' | translate }}
+                  }
+
+                  @if (confirmarPassword.errors?.['noCoincide']) {
+                    {{ 'REGISTRO.ERROR_PASSWORD_NO_COINCIDE' | translate }}
+                  }
+                </p>
+              }
+            </div>
+
+            <div class="terminos-row">
+              <label class="terminos-label">
+                <input type="checkbox" formControlName="terminos" class="terminos-check"/>
+                <span class="terminos-custom"></span>
+
+                <span class="terminos-texto">
+                  {{ 'REGISTRO.ACEPTO' | translate }}
+                  <a href="#" target="_blank">{{ 'REGISTRO.TERMINOS' | translate }}</a>
+                  {{ 'REGISTRO.Y_LA' | translate }}
+                  <a href="#" target="_blank">{{ 'REGISTRO.PRIVACIDAD' | translate }}</a>
+                  {{ 'REGISTRO.DE_AGROCASTILLO' | translate }}
+                </span>
+              </label>
+
+              @if (terminos.invalid && terminos.touched) {
+                <p class="field-error">
+                  {{ 'REGISTRO.ERROR_TERMINOS' | translate }}
+                </p>
+              }
+            </div>
+
+            @if (errorMensaje()) {
+              <div class="alert-error" role="alert">
+                <svg viewBox="0 0 20 20" fill="none">
+                  <circle cx="10" cy="10" r="8.333" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M10 6.667v3.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  <circle cx="10" cy="13.333" r="0.833" fill="currentColor"/>
+                </svg>
+
+                <span>{{ errorMensaje() }}</span>
+              </div>
+            }
+
+            <div class="buttons-row">
+              <button type="button" class="btn-back" (click)="retrocederPaso()">
+                <svg viewBox="0 0 20 20" fill="none">
+                  <path d="M15.833 10H4.167M9.167 5.833L5 10l4.167 4.167" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+
+                {{ 'REGISTRO.VOLVER' | translate }}
+              </button>
+
+              <button type="submit" class="btn-submit" [disabled]="formularioInvalido">
+                @if (!cargando()) {
+                  <span>{{ 'REGISTRO.CREAR_CUENTA' | translate }}</span>
+                }
+
+                @if (cargando()) {
+                  <span class="spinner-row">
+                    <span class="spinner"></span>
+                    {{ 'REGISTRO.REGISTRANDO' | translate }}
+                  </span>
+                }
+              </button>
+            </div>
+
+          </div>
+
+        </form>
+
+        <p class="register-footer">
+          {{ 'REGISTRO.YA_TIENES_CUENTA' | translate }}
+          <a routerLink="/login">{{ 'REGISTRO.INICIA_SESION' | translate }}</a>
+        </p>
+
+      </ng-container>
+    }
+
+  </div>
+
+</section>
+```

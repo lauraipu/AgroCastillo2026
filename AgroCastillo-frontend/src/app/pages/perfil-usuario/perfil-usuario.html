@@ -1,0 +1,163 @@
+<section class="perfil-page">
+
+  <div class="perfil-container">
+
+    @if (usuario()) {
+
+      <div class="perfil-header-card">
+
+        <div class="avatar-circle">
+          {{ obtenerInicial(usuario()?.nombre) }}
+        </div>
+
+        <div class="perfil-info">
+
+          <span class="rol-badge">
+            {{ usuario()?.rol }}
+          </span>
+
+          <h1 class="perfil-nombre">
+            {{ usuario()?.nombre }}
+          </h1>
+
+          <p class="perfil-email">
+            {{ usuario()?.email }}
+          </p>
+
+        </div>
+
+        <button
+          class="btn-editar"
+          (click)="activarEdicion()">
+
+          Editar perfil
+
+        </button>
+
+      </div>
+
+      <div class="info-grid">
+
+        <div class="info-card">
+
+          <h3>Información personal</h3>
+
+          <div class="field-group">
+
+            <label class="field-label">
+              Nombre completo
+            </label>
+
+            <input
+              class="field-input"
+              type="text"
+              [(ngModel)]="nombreEditable"
+              [readonly]="!modoEdicion()">
+
+          </div>
+
+          <div class="field-group">
+
+            <label class="field-label">
+              Correo electrónico
+            </label>
+
+            <input
+              class="field-input"
+              type="email"
+              [value]="usuario()?.email"
+              readonly>
+
+          </div>
+
+          <div class="field-group">
+
+            <label class="field-label">
+              Proveedor de acceso
+            </label>
+
+            <input
+              class="field-input"
+              type="text"
+              [value]="usuario()?.provider"
+              readonly>
+
+          </div>
+
+          @if (modoEdicion()) {
+
+            <div class="actions-row">
+
+              <button
+                class="btn-cancelar"
+                (click)="cancelarEdicion()">
+
+                Cancelar
+
+              </button>
+
+              <button
+                class="btn-guardar"
+                (click)="guardarCambios()">
+
+                Guardar cambios
+
+              </button>
+
+            </div>
+
+          }
+
+        </div>
+
+        <div class="info-card">
+
+          <h3>Líneas de interés</h3>
+
+          <div class="intereses-container">
+
+            @for (interes of intereses; track interes) {
+
+              <span class="interes-chip">
+
+                {{ interes }}
+
+              </span>
+
+            }
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <h2 class="section-title">
+        Métricas de actividad
+      </h2>
+
+      <div class="metricas-grid">
+
+        @for (metrica of metricas; track metrica.label) {
+
+          <div class="metrica-card">
+
+            <span class="metrica-label">
+              {{ metrica.label }}
+            </span>
+
+            <div class="metrica-valor">
+              {{ metrica.valor }}
+            </div>
+
+          </div>
+
+        }
+
+      </div>
+
+    }
+
+  </div>
+
+</section>

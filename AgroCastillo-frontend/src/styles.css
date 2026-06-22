@@ -1,0 +1,134 @@
+@import 'leaflet/dist/leaflet.css';
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+/* 
+   ============================================================
+   AGROCASTILLO — ARMONÍA VISUAL (v4.0)
+   ============================================================
+*/
+
+:root {
+  /* VARIABLES DE ACCESIBILIDAD BASE */
+  --base-font-size: 16px;
+  --bg-main: #0c1a11;
+  --text-main: #ffffff;
+
+  /* PALETA DE ALTO CONTRASTE Y CONFORT VISUAL */
+  --ac-bg-soft:       #FDFBF9; /* Blanco hueso (relajante) */
+  --ac-nav-deep:      #1B3022; /* Verde bosque profundo (elegancia) */
+  --ac-accent:        #2D5A43; /* Verde bosque medio */
+  --ac-gold-soft:     #B59461; /* Dorado mate (prestigio) */
+  --ac-text-dark:     #212529; /* Casi negro (lectura clara) */
+  --ac-text-muted:    #5A6268; /* Gris suave para subtítulos */
+  --ac-white:         #FFFFFF;
+  
+  /* Compatibilidad total para eliminar el "verde lima" antiguo */
+  --v1: var(--ac-bg-soft); 
+  --v2: var(--ac-accent);
+  --v3: var(--ac-nav-deep);
+  --agro-verde-bosque: var(--ac-nav-deep);
+  --agro-dorado: var(--ac-gold-soft);
+}
+
+/* BASE */
+html {
+  font-size: var(--base-font-size);
+}
+
+body {
+  background-color: var(--ac-bg-soft);
+  color: var(--text-main);
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* NAVBAR REFINADO */
+.site-header {
+  background-color: var(--ac-nav-deep) !important;
+  border-bottom: 4px solid var(--ac-gold-soft);
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: var(--ac-gold-soft) !important;
+  text-shadow: 0 0 10px rgba(181, 148, 97, 0.3);
+}
+
+/* CARDS & SUPERFICIES */
+.agro-card {
+  background: var(--ac-white);
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 8px 24px rgba(27, 48, 34, 0.05);
+  border-radius: 12px;
+}
+
+/* BOTONES */
+.btn-agro-primary {
+  background-color: var(--ac-nav-deep);
+  color: var(--ac-white);
+  border: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-agro-primary:hover {
+  background-color: var(--ac-accent);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* FIX PARA SECCIONES ANTIGUAS (Como se ve en la captura) */
+.cta-section {
+  background-color: var(--ac-bg-soft) !important;
+  color: var(--ac-text-dark) !important;
+  padding: 60px 0;
+}
+
+body.ac-alto-contraste {
+  background: #050505 !important;
+  color: #ffffff !important;
+}
+
+body.ac-alto-contraste * {
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+
+body.ac-alto-contraste a,
+body.ac-alto-contraste button {
+  color: #ffffff !important;
+}
+
+body.ac-alto-contraste input,
+body.ac-alto-contraste textarea,
+body.ac-alto-contraste select {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 1px solid #ffffff !important;
+}
+
+body.ac-fuente-grande {
+  font-size: 120%;
+}
+
+body.ac-fuente-grande button,
+body.ac-fuente-grande input,
+body.ac-fuente-grande textarea,
+body.ac-fuente-grande select {
+  font-size: 1.05rem;
+}
+
+body.ac-reducir-movimiento *,
+body.ac-reducir-movimiento *::before,
+body.ac-reducir-movimiento *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}

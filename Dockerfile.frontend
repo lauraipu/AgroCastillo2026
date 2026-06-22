@@ -1,0 +1,61 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# 🐳 DOCKERFILE - FRONTEND (Angular)
+# ═══════════════════════════════════════════════════════════════════════════════
+# Compilación multi-etapa:
+# 1. Stage BUILD: Compilar Angular a static files
+# 2. Stage SERVE: Servir con Nginx
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ─────────────────────────────────────────────────────────────────────────────
+# STAGE 1: BUILD
+# ─────────────────────────────────────────────────────────────────────────────
+
+FROM node:20-alpine AS build
+
+WORKDIR /app
+
+# Copiar package.json y package-lock.json
+COPY AgroCastillo-frontend/package.json .
+COPY AgroCastillo-frontend/package-lock.json .
+
+# Instalar dependencias (capa cacheable)
+RUN npm ci --omit=dev
+
+# Copiar código fuente
+COPY AgroCastillo-frontend/ .
+
+# Build de producción
+RUN npm run build
+
+# ─────────────────────────────────────────────────────────────────────────────
+# STAGE 2: SERVE CON NGINX
+# ─────────────────────────────────────────────────────────────────────────────
+
+FROM nginx:alpine
+
+# Copiar configuración Nginx
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Copiar archivos compilados desde stage BUILD
+COPY --from=build /app/dist/agrocastillo-frontend/browser /usr/share/nginx/html
+
+# Crear usuario no-root
+RUN chmod 755 /usr/share/nginx/html
+
+# ─────────────────────────────────────────────────────────────────────────────
+# CONFIGURACIÓN
+# ─────────────────────────────────────────────────────────────────────────────
+
+EXPOSE 4200
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+    CMD wget --quiet --tries=1 --spider http://localhost:4200/ || exit 1
+
+# Nginx se ejecuta por defecto
+CMD ["nginx", "-g", "daemon off;"]
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# BUILD: docker build -f Dockerfile.frontend -t agrocastillo-frontend:1.0 .
+# RUN:   docker run -p 4200:4200 agrocastillo-frontend:1.0
+# ═══════════════════════════════════════════════════════════════════════════════

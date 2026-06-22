@@ -1,0 +1,194 @@
+<section class="comunidad-page">
+
+  <div class="comunidad-header">
+    <div>
+      <span class="section-label">Comunidad AgroCastillo</span>
+      <h1>Hilos de discusión</h1>
+      <p>
+        Comparte ideas, dudas y recomendaciones sobre el uso de software académico
+        en contextos agrícolas y universitarios.
+      </p>
+    </div>
+  </div>
+
+  @if (error()) {
+    <div class="alert alert-error">
+      {{ error() }}
+    </div>
+  }
+
+  @if (mensajeExito()) {
+    <div class="alert alert-success">
+      {{ mensajeExito() }}
+    </div>
+  }
+
+  <div class="comunidad-grid">
+
+    <aside class="hilos-panel">
+
+      <div class="panel-card crear-hilo-card">
+        <h2>Crear nuevo hilo</h2>
+
+        <div class="form-group">
+          <label for="titulo">Título</label>
+          <input
+            id="titulo"
+            type="text"
+            [(ngModel)]="nuevoTitulo"
+            placeholder="Ej: Recomendaciones para publicar una app">
+        </div>
+
+        <div class="form-group">
+          <label for="contenido">Contenido</label>
+          <textarea
+            id="contenido"
+            rows="5"
+            [(ngModel)]="nuevoContenido"
+            placeholder="Escribe la idea principal del hilo...">
+          </textarea>
+        </div>
+
+        <button class="btn-primary" type="button" (click)="crearHilo()">
+          Publicar hilo
+        </button>
+      </div>
+
+      <div class="panel-card lista-hilos-card">
+        <div class="panel-title-row">
+          <h2>Hilos recientes</h2>
+          <span>{{ hilos().length }}</span>
+        </div>
+
+        @if (cargando()) {
+          <p class="empty-text">Cargando hilos...</p>
+        } @else if (hilos().length === 0) {
+          <p class="empty-text">Aún no hay hilos publicados.</p>
+        } @else {
+          <div class="hilos-list">
+            @for (hilo of hilos(); track hilo.idHilo) {
+              <button
+                type="button"
+                class="hilo-item"
+                [class.active]="hiloSeleccionado()?.idHilo === hilo.idHilo"
+                (click)="seleccionarHilo(hilo)">
+
+                <span class="hilo-title">
+                  {{ hilo.titulo }}
+                </span>
+
+                <span class="hilo-date">
+                  {{ formatearFecha(hilo.fechaCreacion) }}
+                </span>
+
+              </button>
+            }
+          </div>
+        }
+      </div>
+
+    </aside>
+
+    <main class="detalle-panel">
+
+      @if (hiloSeleccionado()) {
+
+        <article class="detalle-card">
+
+          <div class="detalle-header">
+            <span class="badge">Hilo seleccionado</span>
+
+            <h2>
+              {{ hiloSeleccionado()?.titulo }}
+            </h2>
+
+            <p class="detalle-meta">
+              Usuario #{{ hiloSeleccionado()?.idUsuario }}
+              ·
+              {{ formatearFecha(hiloSeleccionado()?.fechaCreacion) }}
+            </p>
+          </div>
+
+          <p class="detalle-contenido">
+            {{ hiloSeleccionado()?.contenido }}
+          </p>
+
+        </article>
+
+        <section class="comentarios-card">
+
+          <div class="comentarios-header">
+            <div>
+              <h2>Comentarios</h2>
+              <p>Participa en la conversación de este hilo.</p>
+            </div>
+
+            <span class="comentarios-count">
+              {{ comentarios().length }}
+            </span>
+          </div>
+
+          <div class="comentario-form">
+            <label for="comentario">Nuevo comentario</label>
+
+            <textarea
+              id="comentario"
+              rows="4"
+              [(ngModel)]="nuevoComentario"
+              placeholder="Escribe tu comentario...">
+            </textarea>
+
+            <button class="btn-secondary" type="button" (click)="crearComentario()">
+              Comentar
+            </button>
+          </div>
+
+          <div class="comentarios-list">
+
+            @if (comentarios().length === 0) {
+              <p class="empty-text">
+                Este hilo todavía no tiene comentarios.
+              </p>
+            } @else {
+              @for (comentario of comentarios(); track comentario.idComentario) {
+                <div class="comentario-item">
+
+                  <div class="comentario-avatar">
+                    U
+                  </div>
+
+                  <div class="comentario-body">
+                    <div class="comentario-top">
+                      <strong>Usuario #{{ comentario.idUsuario }}</strong>
+                      <span>{{ formatearFecha(comentario.fechaComentario) }}</span>
+                    </div>
+
+                    <p>
+                      {{ comentario.contenido }}
+                    </p>
+                  </div>
+
+                </div>
+              }
+            }
+
+          </div>
+
+        </section>
+
+      } @else {
+
+        <div class="detalle-card empty-state">
+          <h2>Selecciona un hilo</h2>
+          <p>
+            Elige un hilo de la lista para ver su contenido y sus comentarios.
+          </p>
+        </div>
+
+      }
+
+    </main>
+
+  </div>
+
+</section>

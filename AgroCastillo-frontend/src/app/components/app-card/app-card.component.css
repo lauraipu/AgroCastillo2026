@@ -1,0 +1,37 @@
+﻿.card-software {
+  background-color: rgba(13, 35, 21, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 12px;
+}
+
+.bg-green-pastel {
+  background-color: #a2e8b9 !important;
+}
+
+.text-green-pastel {
+  color: #a2e8b9 !important;
+}
+
+.btn-outline-green {
+  color: #a2e8b9;
+  border-color: #a2e8b9;
+  font-weight: 600;
+  background: transparent;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-green:hover {
+  background-color: #a2e8b9;
+  color: #0d2315;
+}
+
+.text-muted-agro {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.line-clamp {
+  display: -webkit-box;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
+}

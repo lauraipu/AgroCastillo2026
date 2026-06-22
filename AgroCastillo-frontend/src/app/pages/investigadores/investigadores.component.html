@@ -1,0 +1,99 @@
+<section class="investigadores-page">
+  <header class="page-header">
+    <span class="eyebrow">{{ 'INVESTIGADORES.HEADER.EYEBROW' | translate }}</span>
+    <h1>{{ 'INVESTIGADORES.HEADER.TITULO' | translate }}</h1>
+    <p>
+      {{ 'INVESTIGADORES.HEADER.DESCRIPCION' | translate }}
+    </p>
+  </header>
+
+  <section class="filters-panel">
+    <div class="search-field">
+      <label for="buscarInvestigador">{{ 'INVESTIGADORES.FILTROS.BUSQUEDA_LABEL' | translate }}</label>
+      <input
+        id="buscarInvestigador"
+        type="search"
+        [ngModel]="terminoBusqueda()"
+        (ngModelChange)="actualizarBusqueda($event)"
+        [placeholder]="'INVESTIGADORES.FILTROS.BUSQUEDA_PLACEHOLDER' | translate"
+      />
+    </div>
+
+    <div class="select-field">
+      <label for="lineaEnfoque">{{ 'INVESTIGADORES.FILTROS.LINEA_LABEL' | translate }}</label>
+      <select
+        id="lineaEnfoque"
+        [ngModel]="lineaSeleccionada()"
+        (ngModelChange)="seleccionarLinea($event)">
+        @for (linea of lineasEnfoque; track linea) {
+          <option [value]="linea">{{ linea | translate }}</option>
+        }
+      </select>
+    </div>
+  </section>
+
+  <div class="results-bar">
+    <span>{{ investigadoresFiltrados().length }} {{ 'INVESTIGADORES.RESULTADOS.ENCONTRADOS' | translate }}</span>
+
+    @if (terminoBusqueda() || lineaSeleccionada() !== 'Todas') {
+      <button type="button" (click)="limpiarFiltros()">
+        {{ 'INVESTIGADORES.RESULTADOS.RESTABLECER_FILTROS' | translate }}
+      </button>
+    }
+  </div>
+
+  <section class="investigadores-grid">
+    @for (investigador of investigadoresFiltrados(); track investigador.id) {
+      <article class="investigador-card">
+        <div class="avatar">
+          {{ obtenerInicial(investigador.nombre) }}
+        </div>
+
+        <div class="identity">
+          <h2>{{ investigador.nombre }}</h2>
+          <span class="role-badge">{{ investigador.rol | translate }}</span>
+        </div>
+
+        <div class="technical-info">
+          <p class="email">{{ investigador.correo }}</p>
+
+          <div class="info-item">
+            <span>{{ 'INVESTIGADORES.CARD.INSTITUCION' | translate }}</span>
+            <strong>{{ investigador.institucion }}</strong>
+          </div>
+
+          <div class="info-item focus">
+            <span>{{ 'INVESTIGADORES.CARD.LINEA_ACTIVA' | translate }}</span>
+            <strong>{{ investigador.lineaEnfoque | translate }}</strong>
+          </div>
+        </div>
+
+        <div class="keywords">
+          @for (palabra of investigador.palabrasClave; track palabra) {
+            <span>{{ palabra | translate }}</span>
+          }
+        </div>
+
+        <div class="indexed-links">
+          <button type="button" (click)="verPerfilPublico(investigador)">
+            {{ 'INVESTIGADORES.CARD.VER_PERFIL' | translate }}
+          </button>
+
+          <a [href]="investigador.cvlacUrl" target="_blank" rel="noopener noreferrer">
+            {{ 'INVESTIGADORES.CARD.CVLAC' | translate }}
+          </a>
+        </div>
+      </article>
+    } @empty {
+      <div class="empty-state">
+        <h2>{{ 'INVESTIGADORES.EMPTY.TITULO' | translate }}</h2>
+        <p>
+          {{ 'INVESTIGADORES.EMPTY.DESCRIPCION' | translate }}
+        </p>
+        <button type="button" (click)="limpiarFiltros()">
+          {{ 'INVESTIGADORES.EMPTY.BOTON' | translate }}
+        </button>
+      </div>
+    }
+  </section>
+</section>

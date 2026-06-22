@@ -1,0 +1,309 @@
+﻿<section class="catalogo-page">
+
+  <header class="catalogo-header">
+
+    <div>
+
+      <span class="eyebrow">
+        Repositorio AgroCastillo
+      </span>
+
+      <h1>
+        Catálogo de Aplicaciones y Herramientas Científicas
+      </h1>
+
+      <p>
+        Software académico indexado para investigación,
+        validación tecnológica y toma de decisiones
+        agroindustriales.
+      </p>
+
+    </div>
+
+  </header>
+
+  <section class="filters-panel">
+
+    <div class="filter-group">
+
+      <span class="filter-label">
+        Sector productivo
+      </span>
+
+      <div class="segmented-control">
+
+        @for (sector of sectores(); track sector) {
+
+          <button
+            type="button"
+            [class.active]="sectorSeleccionado() === sector"
+            (click)="seleccionarSector(sector)">
+
+            {{ sector === 'Todas'
+              ? 'Todas las Herramientas'
+              : 'Sector ' + sector }}
+
+          </button>
+
+        }
+
+      </div>
+
+    </div>
+
+    <div class="filter-group">
+
+      <span class="filter-label">
+        Taxonomía científica
+      </span>
+
+      <div class="subcategories">
+
+        <button
+          type="button"
+          [class.active]="subcategoriaActiva() === 'Todas'"
+          (click)="seleccionarSubcategoria('Todas')">
+
+          Todas las subcategorías
+
+        </button>
+
+        @for (
+          subcategoria of subcategoriasDisponibles();
+          track subcategoria
+        ) {
+
+          <button
+            type="button"
+            [class.active]="subcategoriaActiva() === subcategoria"
+            (click)="seleccionarSubcategoria(subcategoria)">
+
+            {{ subcategoria }}
+
+          </button>
+
+        }
+
+      </div>
+
+    </div>
+
+    <div class="search-row">
+
+      <label for="busquedaCatalogo">
+        Búsqueda académica
+      </label>
+
+      <div class="search-box">
+
+        <input
+          id="busquedaCatalogo"
+          type="search"
+          [ngModel]="terminoBusqueda()"
+          (ngModelChange)="actualizarBusqueda($event)"
+          placeholder="Buscar por herramienta, palabra clave o investigador principal"
+        />
+
+        @if (terminoBusqueda()) {
+
+          <button
+            type="button"
+            (click)="actualizarBusqueda('')">
+
+            Limpiar
+
+          </button>
+
+        }
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <section class="results-summary">
+
+    <span>
+      {{ herramientasFiltradas().length }}
+      resultados encontrados
+    </span>
+
+    @if (
+      sectorSeleccionado() !== 'Todas' ||
+      subcategoriaActiva() !== 'Todas' ||
+      terminoBusqueda()
+    ) {
+
+      <button
+        type="button"
+        (click)="limpiarFiltros()">
+
+        Restablecer filtros
+
+      </button>
+
+    }
+
+  </section>
+
+  @if (cargando()) {
+
+    <section class="empty-state">
+
+      <h2>
+        Cargando aplicaciones
+      </h2>
+
+      <p>
+        Consultando las herramientas registradas en la base de datos.
+      </p>
+
+    </section>
+
+  }
+
+  @if (error()) {
+
+    <section class="empty-state">
+
+      <h2>
+        Error al cargar aplicaciones
+      </h2>
+
+      <p>
+        {{ error() }}
+      </p>
+
+      <button
+        type="button"
+        (click)="cargarAplicaciones()">
+
+        Reintentar
+
+      </button>
+
+    </section>
+
+  }
+
+  @if (!cargando() && !error()) {
+
+    <section class="tools-grid">
+
+      @for (
+        herramienta of herramientasFiltradas();
+        track herramienta.id
+      ) {
+
+        <article class="tool-card">
+
+          <div class="card-index">
+
+            <span class="repository-code">
+              ID: {{ herramienta.codigo }}
+            </span>
+
+            <span class="category-badge">
+              {{ herramienta.categorias && herramienta.categorias.length
+                ? herramienta.categorias.join(', ')
+                : herramienta.subcategoria }}
+            </span>
+
+          </div>
+
+          <div class="card-body">
+
+            <h2>
+              {{ herramienta.nombre }}
+            </h2>
+
+            <p>
+              {{ herramienta.descripcion }}
+            </p>
+
+          </div>
+
+          <div class="researcher">
+
+            <span>
+              Investigador principal
+            </span>
+
+            <strong>
+              {{ herramienta.investigadorPrincipal }}
+            </strong>
+
+          </div>
+
+          <div class="metadata">
+
+            <span>
+              {{ herramienta.version }}
+            </span>
+
+            <span>
+              TRL {{ herramienta.trl }}
+            </span>
+
+            <span>
+              {{ herramienta.consultas }} consultas
+            </span>
+
+          </div>
+
+          @if (herramienta.urlAplicacion) {
+
+            <button
+              class="access-button"
+              type="button"
+              (click)="accederHerramienta(herramienta)">
+
+              Acceder a herramienta
+
+            </button>
+
+          } @else {
+
+            <button
+              class="access-button"
+              type="button"
+              (click)="accederHerramienta(herramienta)">
+
+              Sin enlace registrado
+
+            </button>
+
+          }
+
+        </article>
+
+      } @empty {
+
+        <div class="empty-state">
+
+          <h2>
+            No se encontraron coincidencias
+          </h2>
+
+          <p>
+            Ajusta los filtros o el término de búsqueda.
+          </p>
+
+          <button
+            type="button"
+            (click)="limpiarFiltros()">
+
+            Restablecer búsqueda
+
+          </button>
+
+        </div>
+
+      }
+
+    </section>
+
+  }
+
+</section>

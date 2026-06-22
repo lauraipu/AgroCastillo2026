@@ -1,0 +1,217 @@
+<section class="mis-apps-page">
+  <header class="panel-header">
+    <div>
+      <span class="eyebrow">Panel del investigador</span>
+      <h1>Gestión de Mis Aplicaciones</h1>
+      <p>
+        Administra las aplicaciones registradas en AgroCastillo. Los datos se
+        guardan directamente en la tabla aplicaciones de la base de datos.
+      </p>
+    </div>
+
+    <button
+      class="btn-register"
+      type="button"
+      (click)="registrarNuevaAplicacion()">
+      Registrar Nueva Aplicación
+    </button>
+  </header>
+
+  <section class="metrics-strip" aria-label="Resumen de métricas">
+    <article>
+      <span>Aplicaciones registradas</span>
+      <strong>{{ totalAplicaciones() }}</strong>
+    </article>
+
+    <article>
+      <span>Promedio académico</span>
+      <strong>{{ promedioGeneral() }}/5.0</strong>
+    </article>
+
+    <article>
+      <span>Descargas acumuladas</span>
+      <strong>{{ totalDescargas() }}</strong>
+    </article>
+  </section>
+
+  @if (cargando()) {
+    <section class="empty-state">
+      <h2>Cargando aplicaciones</h2>
+      <p>Consultando la información registrada en la base de datos.</p>
+    </section>
+  }
+
+  @if (error()) {
+    <section class="empty-state error-state">
+      <h2>Error de conexión</h2>
+      <p>{{ error() }}</p>
+      <button type="button" (click)="cargarAplicaciones()">
+        Reintentar
+      </button>
+    </section>
+  }
+
+  @if (!cargando() && !error()) {
+    <section class="apps-panel">
+      <div class="table-header">
+        <span>Software registrado</span>
+        <span>URL</span>
+        <span>Fecha</span>
+        <span>Estado</span>
+        <span>Acciones</span>
+      </div>
+
+      <div class="apps-list">
+        @for (aplicacion of aplicaciones(); track aplicacion.id) {
+          <article class="app-row">
+            <div class="software-cell">
+              <div class="app-icon">
+                <span>{{ aplicacion.nombre.charAt(0) }}</span>
+              </div>
+
+              <div>
+                <div class="software-title">
+                  <h2>{{ aplicacion.nombre }}</h2>
+                  <span>{{ obtenerCodigo(aplicacion) }}</span>
+                </div>
+
+                <p>{{ aplicacion.descripcion }}</p>
+
+                <div class="tags">
+                  <span class="sector">Autor ID: {{ aplicacion.idAutor }}</span>
+                  <span>Actualizada: {{ obtenerFecha(aplicacion.fechaActualizacion) }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="metric-cell">
+              @if (aplicacion.urlAplicacion) {
+                <a
+                  class="app-url"
+                  [href]="aplicacion.urlAplicacion"
+                  target="_blank"
+                  rel="noopener noreferrer">
+                  Abrir enlace
+                </a>
+              } @else {
+                <span>Sin URL</span>
+              }
+            </div>
+
+            <div class="metric-cell">
+              <strong>{{ obtenerFecha(aplicacion.fechaCreacion) }}</strong>
+              <span>Creación</span>
+            </div>
+
+            <div class="status-cell">
+              <span
+                class="registry-status"
+                [class.approved]="claseEstado(aplicacion.estado) === 'approved'"
+                [class.review]="claseEstado(aplicacion.estado) === 'review'"
+                [class.rejected]="claseEstado(aplicacion.estado) === 'rejected'">
+                {{ traducirEstado(aplicacion.estado) }}
+              </span>
+            </div>
+
+            <div class="actions-cell">
+              <button
+                type="button"
+                title="Editar Ficha"
+                (click)="editarFicha(aplicacion)">
+                <i class="bi bi-pencil-square"></i>
+              </button>
+
+              <button
+                type="button"
+                title="Ver Documentación"
+                (click)="verDocumentacion(aplicacion)">
+                <i class="bi bi-file-earmark-text"></i>
+              </button>
+
+              <button
+                type="button"
+                title="Ver Estadísticas"
+                (click)="verEstadisticas(aplicacion)">
+                <i class="bi bi-bar-chart-line"></i>
+              </button>
+
+              <button
+                type="button"
+                class="danger"
+                title="Eliminar Registro"
+                (click)="eliminarRegistro(aplicacion.id)">
+                <i class="bi bi-trash3"></i>
+              </button>
+            </div>
+          </article>
+        } @empty {
+          <div class="empty-state">
+            <h2>No hay aplicaciones registradas</h2>
+            <p>
+              Cuando registres una aplicación, quedará guardada directamente en
+              la tabla aplicaciones y aparecerá en este panel.
+            </p>
+
+            <button type="button" (click)="registrarNuevaAplicacion()">
+              Registrar Nueva Aplicación
+            </button>
+          </div>
+        }
+      </div>
+    </section>
+  }
+
+  @if (modalAbierto()) {
+    <div class="modal-overlay" (click)="cerrarModal()">
+      <section class="modal-card" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2>
+            {{ modoEdicion() ? 'Editar aplicación' : 'Registrar nueva aplicación' }}
+          </h2>
+
+          <button type="button" class="btn-close" (click)="cerrarModal()">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+
+        <form class="app-form" (ngSubmit)="guardarAplicacion()">
+          <label>
+            Nombre de la aplicación
+            <input
+              type="text"
+              name="nombre"
+              [(ngModel)]="formulario.nombre"
+              placeholder="Ej: AgroData Café"
+              required
+            />
+          </label>
+
+          <label>
+            Descripción
+            <textarea
+              name="descripcion"
+              rows="4"
+              [(ngModel)]="formulario.descripcion"
+              placeholder="Describe la función principal de la aplicación"
+              required>
+            </textarea>
+          </label>
+
+          <label>
+            URL de la aplicación o repositorio
+            <input
+              type="url"
+              name="urlAplicacion"
+              [(ngModel)]="formulario.urlAplicacion"
+              placeholder="https://..."
+            />
+          </label>
+
+          <button type="submit" class="btn-register full">
+            {{ modoEdicion() ? 'Guardar cambios' : 'Registrar aplicación' }}
+          </button>
+        </form>
+      </section>
+    </div>
+  }
+</section>

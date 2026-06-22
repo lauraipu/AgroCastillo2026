@@ -1,0 +1,151 @@
+<section class="inicio-page">
+
+  <section class="hero-carousel">
+    <div class="hero-overlay">
+      <div class="hero-content">
+
+        <span class="hero-badge">{{ 'INICIO.HERO.BADGE' | translate }}</span>
+
+        <h1>{{ 'INICIO.HERO.TITULO' | translate }}</h1>
+
+        <p>{{ 'INICIO.HERO.DESCRIPCION' | translate }}</p>
+
+        <div class="hero-actions">
+          <a routerLink="/aplicaciones" class="btn-primary">
+            {{ 'INICIO.HERO.BTN_CATALOGO' | translate }}
+          </a>
+
+          <a routerLink="/contacto" class="btn-secondary">
+            {{ 'INICIO.HERO.BTN_CONTACTO' | translate }}
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="metrics-section">
+    @for (metrica of metricas; track metrica.etiqueta) {
+      <article class="metric-card">
+        <strong>{{ metrica.valor }}</strong>
+        <span>{{ metrica.etiqueta }}</span>
+      </article>
+    }
+  </section>
+
+  <section class="ecosystem-section">
+    <div class="section-heading">
+      <span class="eyebrow">{{ 'INICIO.OPERACION.EYEBROW' | translate }}</span>
+      <h2>{{ 'INICIO.OPERACION.TITULO' | translate }}</h2>
+      <p>{{ 'INICIO.OPERACION.DESCRIPCION' | translate }}</p>
+    </div>
+
+    <div class="process-grid">
+      <article>
+        <span>01</span>
+        <h3>{{ 'INICIO.OPERACION.PASO1_TITULO' | translate }}</h3>
+        <p>{{ 'INICIO.OPERACION.PASO1_DESC' | translate }}</p>
+      </article>
+
+      <article>
+        <span>02</span>
+        <h3>{{ 'INICIO.OPERACION.PASO2_TITULO' | translate }}</h3>
+        <p>{{ 'INICIO.OPERACION.PASO2_DESC' | translate }}</p>
+      </article>
+
+      <article>
+        <span>03</span>
+        <h3>{{ 'INICIO.OPERACION.PASO3_TITULO' | translate }}</h3>
+        <p>{{ 'INICIO.OPERACION.PASO3_DESC' | translate }}</p>
+      </article>
+
+      <article>
+        <span>04</span>
+        <h3>{{ 'INICIO.OPERACION.PASO4_TITULO' | translate }}</h3>
+        <p>{{ 'INICIO.OPERACION.PASO4_DESC' | translate }}</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="research-lines-section">
+    <div class="section-heading">
+      <span class="eyebrow">{{ 'INICIO.LINEAS.EYEBROW' | translate }}</span>
+      <h2>{{ 'INICIO.LINEAS.TITULO' | translate }}</h2>
+      <p>{{ 'INICIO.LINEAS.DESCRIPCION' | translate }}</p>
+    </div>
+
+    <div class="research-grid">
+      @for (linea of lineasInvestigacion; track linea.titulo) {
+        <article class="research-card">
+          <h3>{{ linea.titulo }}</h3>
+          <p>{{ linea.descripcion }}</p>
+
+          <div class="chips">
+            @for (enfoque of linea.enfoques; track enfoque) {
+              <span>{{ enfoque }}</span>
+            }
+          </div>
+        </article>
+      }
+    </div>
+  </section>
+
+  <section class="featured-tools-section">
+    <div class="section-heading centered">
+      <span class="eyebrow">{{ 'INICIO.HERRAMIENTAS.EYEBROW' | translate }}</span>
+      <h2>{{ 'INICIO.HERRAMIENTAS.TITULO' | translate }}</h2>
+      <p>{{ 'INICIO.HERRAMIENTAS.DESCRIPCION' | translate }}</p>
+    </div>
+
+    <div class="tools-grid">
+      @for (herramienta of herramientasDestacadas; track herramienta.id) {
+        <article class="tool-card">
+
+          <div class="tool-index">
+            <span>{{ herramienta.id }}</span>
+            <strong>{{ herramienta.sector }}</strong>
+          </div>
+
+          <h3>{{ herramienta.nombre }}</h3>
+
+          <p>{{ herramienta.descripcion }}</p>
+
+          <div class="tool-meta">
+            <span>{{ herramienta.version }}</span>
+            <span>{{ herramienta.trl }}</span>
+            <span>{{ herramienta.subarea }}</span>
+          </div>
+
+          <div class="tool-researcher">
+            <span>{{ 'INICIO.HERRAMIENTAS.INVESTIGADOR' | translate }}</span>
+            <strong>{{ herramienta.investigador }}</strong>
+          </div>
+
+          <a routerLink="/aplicaciones" class="tool-link">
+            {{ 'INICIO.HERRAMIENTAS.VER_CATALOGO' | translate }}
+          </a>
+
+        </article>
+      }
+    </div>
+  </section>
+
+  <section class="technology-flow-section">
+    <div class="section-heading">
+      <span class="eyebrow">{{ 'INICIO.FLUJO.EYEBROW' | translate }}</span>
+      <h2>{{ 'INICIO.FLUJO.TITULO' | translate }}</h2>
+      <p>{{ 'INICIO.FLUJO.DESCRIPCION' | translate }}</p>
+    </div>
+
+    <div class="flow-grid">
+      @for (item of flujoTecnologico; track item.paso) {
+        <article class="flow-item">
+          <span>{{ item.paso }}</span>
+          <h3>{{ item.titulo }}</h3>
+          <p>{{ item.descripcion }}</p>
+        </article>
+      }
+    </div>
+  </section>
+
+</section>
