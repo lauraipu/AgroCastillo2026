@@ -79,16 +79,16 @@
 
                 <div class="tags">
                   <span class="sector">Autor ID: {{ aplicacion.idAutor }}</span>
-                  <span>Actualizada: {{ obtenerFecha(aplicacion.fechaActualizacion) }}</span>
+                  <span>Actualizada: {{ obtenerFecha($any(aplicacion).fechaActualizacion) }}</span>
                 </div>
               </div>
             </div>
 
             <div class="metric-cell">
-              @if (aplicacion.urlAplicacion) {
+              @if ($any(aplicacion).urlAplicacion) {
                 <a
                   class="app-url"
-                  [href]="aplicacion.urlAplicacion"
+                  [href]="$any(aplicacion).urlAplicacion"
                   target="_blank"
                   rel="noopener noreferrer">
                   Abrir enlace
@@ -99,17 +99,17 @@
             </div>
 
             <div class="metric-cell">
-              <strong>{{ obtenerFecha(aplicacion.fechaCreacion) }}</strong>
+              <strong>{{ obtenerFecha($any(aplicacion).fechaCreacion) }}</strong>
               <span>Creación</span>
             </div>
 
             <div class="status-cell">
               <span
                 class="registry-status"
-                [class.approved]="claseEstado(aplicacion.estado) === 'approved'"
-                [class.review]="claseEstado(aplicacion.estado) === 'review'"
-                [class.rejected]="claseEstado(aplicacion.estado) === 'rejected'">
-                {{ traducirEstado(aplicacion.estado) }}
+                [class.approved]="$any(aplicacion).estado === 'approved'"
+                [class.review]="$any(aplicacion).estado === 'review'"
+                [class.rejected]="$any(aplicacion).estado === 'rejected'">
+                {{ traducirEstado($any(aplicacion).estado) }}
               </span>
             </div>
 

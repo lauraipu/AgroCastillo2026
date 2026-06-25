@@ -1,0 +1,11 @@
+# Ignorar dependencias locales
+**/node_modules
+**/dist
+**/.idea
+**/.vscode
+
+# Ignorar datos locales de bases de datos o temporales
+**/postgres_data
+**/.git
+**/.gitignore
+**/.dockerignore

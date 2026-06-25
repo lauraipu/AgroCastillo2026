@@ -7,10 +7,10 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 
 # ─────────────────────────────────────────────────────────────────────────────
-# STAGE 1: BUILD
+# STAGE 1: BUILD (CORREGIDO A JAVA 21)
 # ─────────────────────────────────────────────────────────────────────────────
 
-FROM maven:3.9.4-eclipse-temurin-17-alpine AS build
+FROM maven:3.9.6-eclipse-temurin-21-alpine AS build
 
 WORKDIR /app
 
@@ -25,10 +25,10 @@ COPY AgroCastillo-backend/src ./src
 RUN mvn clean package -DskipTests -q
 
 # ─────────────────────────────────────────────────────────────────────────────
-# STAGE 2: RUNTIME
+# STAGE 2: RUNTIME (CORREGIDO A JRE 21)
 # ─────────────────────────────────────────────────────────────────────────────
 
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
 

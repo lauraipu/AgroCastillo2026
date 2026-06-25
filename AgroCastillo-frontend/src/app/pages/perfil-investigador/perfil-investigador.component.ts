@@ -199,16 +199,18 @@ export class PerfilInvestigadorComponent implements OnInit {
   /**
    * Mapea datos del backend al formato local
    * Asegura compatibilidad con diferentes formatos de respuesta
+   * SE CORRIGIÓ: Casteo de "data" a "any" para permitir la evaluación de cvlacUrl sin errores de tipado estricto.
    */
   private adaptarPerfil(data: PerfilInvestigador): PerfilInvestigador {
+    const rawData = data as any; // 👈 Aquí forzamos el bypass de tipado estricto para la lectura dinámica
     return {
       id: data?.id ?? 0,
-      nombreCompleto: (data?.nombreCompleto || data?.nombre || '').trim() || 'Investigador sin nombre',
-      correo: (data?.correo || data?.email || '').trim() || 'Sin correo',
+      nombreCompleto: (data?.nombreCompleto || rawData?.nombre || '').trim() || 'Investigador sin nombre',
+      correo: (data?.correo || rawData?.email || '').trim() || 'Sin correo',
       institucion: (data?.institucion || '').trim() || 'Institución Universitaria AgroCastillo',
       lineaEnfoque: (data?.lineaEnfoque || '').trim() || 'Sistemas de Producción Agrícola Sostenible',
       orcid: (data?.orcid || '').trim(),
-      cvlac: (data?.cvlac || data?.cvlacUrl || '').trim(),
+      cvlac: (data?.cvlac || rawData?.cvlacUrl || '').trim(), // 👈 Solucionado usando rawData
       competencias: Array.isArray(data?.competencias) ? data.competencias : [],
       aplicaciones: Array.isArray(data?.aplicaciones) ? data.aplicaciones : []
     };
